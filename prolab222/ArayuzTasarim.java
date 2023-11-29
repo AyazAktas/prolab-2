@@ -5,6 +5,7 @@ import java.util.ArrayList;
 import java.util.List;
 import java.awt.GridLayout;
 
+
 public class ArayuzTasarim extends JFrame {
 
     public ArayuzTasarim() {
@@ -228,16 +229,13 @@ class FirmaLoginPage extends JFrame {
             @Override
             public void actionPerformed(ActionEvent e) {
                 // Store multiple sets of usernames and passwords in a list
-                ArrayList<Firma> firmaListesi = new ArrayList<>();
-                firmaListesi.add(new Firma("user1", "password1"));
-                firmaListesi.add(new Firma("user2", "password2"));
-                // Add more entries as needed
+
 
                 String enteredUsername = usernameField.getText();
                 String enteredPassword = new String(passwordField.getPassword());
 
                 boolean isAuthenticated = false;
-
+                List<Firma> firmaListesi=AdminPage.firmaListesi;
                 // Check if entered credentials match any entry in the list
                 for (Firma firma : firmaListesi) {
                     if (enteredUsername.equals(firma.username) && enteredPassword.equals(firma.password)) {
@@ -427,15 +425,18 @@ class FirmaPaneli extends JFrame {
 
 class AdminPage extends JFrame {
 
-    private List<Firma> firmaListesi;
+    // Add more entries as needed
     private double hizmetBedeli;
+    public static List<Firma> firmaListesi = new ArrayList<>(); // firmaListesi'ni burada başlat
 
     public AdminPage() {
         setTitle("Admin Sayfası");
         setSize(600, 400);
         setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
 
-        firmaListesi = new ArrayList<>();
+        firmaListesi.add(new Firma("user1", "password1"));
+        firmaListesi.add(new Firma("user2", "password2"));
+        // Add more entries as needed
         hizmetBedeli = 1000.0; // Sabit hizmet bedeli
 
         JPanel panel = new JPanel();
@@ -525,27 +526,39 @@ class AdminPage extends JFrame {
                     hizmetBedeli = Double.parseDouble(hizmetBedeliStr);
                     JOptionPane.showMessageDialog(null, "Hizmet bedeli başarıyla güncellendi.");
                 } catch (NumberFormatException ex) {
-                    JOptionPane.showMessageDialog(null, "Geçersiz bir sayı girişi yapıldı.");
+                    JOptionPane.showMessageDialog(null, "Geçersiz bir sayı girdiniz.");
                 }
             }
         });
 
-        // Geri butonu için ActionListener ekleme
         btnGeri.addActionListener(new ActionListener() {
             @Override
             public void actionPerformed(ActionEvent e) {
+                // Geri butonuna basıldığında AdminPage penceresini kapat ve AnaSayfa penceresini aç
                 dispose();
-                SwingUtilities.invokeLater(new Runnable() {
-                    @Override
-                    public void run() {
-                        // Geri butonu tıklandığında tekrar giriş ekranına yönlendir
-                        new ArayuzTasarim().setVisible(true);
-                    }
-                });
+                ArayuzTasarim anaSayfa = new ArayuzTasarim();
+                anaSayfa.setVisible(true);
             }
         });
 
+        // Pencere düzenini ayarla
+        panel.setLayout(new GridLayout(3, 2)); // 3 satır, 2 sütunlu bir düzen kullan
+
+        // Paneli pencereye ekle
         add(panel);
+
+        // Pencereyi görünür yap
+        setLocationRelativeTo(null);
+        setVisible(true);
+    }
+
+    public static void main(String[] args) {
+        SwingUtilities.invokeLater(new Runnable() {
+            @Override
+            public void run() {
+                new AdminPage();
+            }
+        });
     }
 }
 class FirmaPage extends JFrame {

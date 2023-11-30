@@ -1,8 +1,7 @@
 import javax.swing.*;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
-import java.util.ArrayList;
-import java.util.List;
+import java.util.*;
 import java.awt.GridLayout;
 
 
@@ -186,18 +185,23 @@ class AdminLoginPage extends JFrame {
         });
     }
 }
-
 class FirmaLoginPage extends JFrame {
 
     public FirmaLoginPage() {
         setTitle("Firma Giriş Sayfası");
         setSize(400, 200);
         setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
-
+        List<Firma> firmaListesi = AdminPage.firmaListesi;
         JPanel panel = new JPanel();
         JTextField usernameField = new JTextField(10);
         JPasswordField passwordField = new JPasswordField(10);
         JButton btnGiris = new JButton("Giriş");
+
+        List<Firma> firmaListesi2 = new ArrayList<>(); // firmaListesi'ni burada başlat
+        firmaListesi2.add(new Firma("A","a123"));
+        firmaListesi2.add(new Firma("B","b123"));
+        firmaListesi2.add(new Firma("C","c123"));
+        firmaListesi2.add(new Firma("D","d123"));
 
         panel.add(new JLabel("Kullanıcı Adı:"));
         panel.add(usernameField);
@@ -228,19 +232,26 @@ class FirmaLoginPage extends JFrame {
         btnGiris.addActionListener(new ActionListener() {
             @Override
             public void actionPerformed(ActionEvent e) {
-                // Store multiple sets of usernames and passwords in a list
-
-
                 String enteredUsername = usernameField.getText();
                 String enteredPassword = new String(passwordField.getPassword());
 
                 boolean isAuthenticated = false;
-                List<Firma> firmaListesi=AdminPage.firmaListesi;
+                List<Firma> firmaListesi = AdminPage.firmaListesi;
+
                 // Check if entered credentials match any entry in the list
                 for (Firma firma : firmaListesi) {
-                    if (enteredUsername.equals(firma.username) && enteredPassword.equals(firma.password)) {
+                    if (firma.girisYap(enteredUsername, enteredPassword)) {
                         isAuthenticated = true;
                         break;
+                    }
+                }
+
+                if (!isAuthenticated) { // Check the second list only if not authenticated yet
+                    for (Firma firma : firmaListesi2) {
+                        if (firma.girisYap(enteredUsername, enteredPassword)) {
+                            isAuthenticated = true;
+                            break;
+                        }
                     }
                 }
 
@@ -269,9 +280,10 @@ class Firma {
     public String password;
     private List<Arac> aracBilgileri;
 
+
     public Firma(String username, String password) {
-        this.username=username;
-        this.password=password;
+        this.username = username;
+        this.password = password;
         this.aracBilgileri = new ArrayList<>();
     }
 
@@ -282,14 +294,14 @@ class Firma {
     public String getUsername() {
         return username;
     }
+
     public String getPassword() {
         return password;
     }
-    public void aracEkle(String aracBilgisi, String tur) {
-        Arac yeniArac = new Arac(aracBilgisi, tur);
-        aracBilgileri.add(yeniArac);
-    }
 
+    public List<Arac> getAracBilgileri() {
+        return aracBilgileri;
+    }
     public void aracCikar(String aracBilgisi) {
         aracBilgileri.removeIf(arac -> arac.getBilgi().equals(aracBilgisi));
     }
@@ -307,7 +319,7 @@ class Firma {
     public List<String> araclariListele(String tur) {
         List<String> turdekiAraclar = new ArrayList<>();
         for (Arac arac : aracBilgileri) {
-            if (arac.getTur().equals(tur)) {
+            if (tur.equals(arac.getTur())) {
                 turdekiAraclar.add(arac.getBilgi());
             }
         }
@@ -318,16 +330,32 @@ class Firma {
     public String toString() {
         return "Firma Adı: " + username;
     }
+    public void aracEkle(Arac yeniArac) {
+        aracBilgileri.add(yeniArac);
+    }
 }
-
-class Arac {
+abstract class Arac {
+    private String information;
+    private String type;
     private String bilgi;
     private String tur;
 
-    public Arac(String bilgi, String tur) {
+    public Arac(String information, String type) {
+        this.information = information;
+        this.type = type;
         this.bilgi = bilgi;
         this.tur = tur;
     }
+
+    public String getInformation() {
+        return information;
+    }
+
+
+    public String getType() {
+        return type;
+    }
+
 
     public String getBilgi() {
         return bilgi;
@@ -336,11 +364,69 @@ class Arac {
     public String getTur() {
         return tur;
     }
+    // Abstract method to be implemented by subclasses
+    public abstract double calculateFuelCost();
 }
+
+class Bus extends Arac {
+    private int passengerCapacity;
+    private String bilgi;
+    private String tur;
+
+    public Bus(String information, String type) {
+        super(information, type);
+        this.passengerCapacity = passengerCapacity;
+    }
+    public Bus(String bilgi, String tur, int passengerCapacity) {
+        super(bilgi, tur);
+        this.passengerCapacity = passengerCapacity;
+    }
+
+    @Override
+    public double calculateFuelCost() {
+        // Implement fuel cost calculation specific to Bus
+        return 0.0;  // Replace with actual calculation
+    }
+}
+
+
+
+class Train extends Arac {
+    private int cargoCapacity;
+
+    public Train(String information, String type, int cargoCapacity) {
+        super(information, type);
+        this.cargoCapacity = cargoCapacity;
+    }
+
+    @Override
+    public double calculateFuelCost() {
+        // Implement fuel cost calculation specific to Train
+        return 0.0;  // Replace with actual calculation
+    }
+}
+
+class Airplane extends Arac {
+    private int flightRange;
+
+    public Airplane(String information, String type, int flightRange) {
+        super(information, type);
+        this.flightRange = flightRange;
+    }
+
+    @Override
+    public double calculateFuelCost() {
+        // Implement fuel cost calculation specific to Airplane
+        return 0.0;  // Replace with actual calculation
+    }
+}
+
 
 
 class FirmaPaneli extends JFrame {
     private Firma firma;
+
+    List<Arac> araclar ;
 
     public FirmaPaneli(Firma firma) {
         setTitle("Firma Sayfası");
@@ -349,6 +435,7 @@ class FirmaPaneli extends JFrame {
 
         this.firma = firma;
 
+        araclar = firma.getAracBilgileri();
         JPanel panel = new JPanel();
         JButton btnAracEkle = new JButton("Araç Ekle");
         JButton btnAracCikar = new JButton("Araç Çıkar");
@@ -383,7 +470,25 @@ class FirmaPaneli extends JFrame {
             public void actionPerformed(ActionEvent e) {
                 String aracBilgisi = JOptionPane.showInputDialog("Eklemek istediğiniz aracın bilgisini girin:");
                 String tur = JOptionPane.showInputDialog("Aracın türünü girin (Hava Yolu, Demir Yolu, Kara Yolu):");
-                firma.aracEkle(aracBilgisi, tur);
+
+                Arac yeniArac = null;
+
+                switch (tur.toLowerCase()) {
+                    case "hava yolu":
+                        yeniArac = new Airplane(aracBilgisi, tur,1 /* Pass relevant parameters */);
+                        break;
+                    case "demir yolu":
+                        yeniArac = new Train(aracBilgisi, tur, 1/* Pass relevant parameters */);
+                        break;
+                    case "kara yolu":
+                        yeniArac = new Bus(aracBilgisi, tur,1/* Pass relevant parameters */);
+                        break;
+                    default:
+                        JOptionPane.showMessageDialog(null, "Geçersiz araç türü.");
+                        return; // Hatalı tür, metodu sonlandır
+                }
+
+                firma.aracEkle(yeniArac);
                 JOptionPane.showMessageDialog(null, "Araç başarıyla eklendi.");
             }
         });
@@ -392,7 +497,16 @@ class FirmaPaneli extends JFrame {
             @Override
             public void actionPerformed(ActionEvent e) {
                 String aracBilgisi = JOptionPane.showInputDialog("Çıkarmak istediğiniz aracın bilgisini girin:");
-                firma.aracCikar(aracBilgisi);
+
+                // Access the aracBilgileri list through the firma instance
+                List<Arac> aracBilgileri = firma.getAracBilgileri();
+
+                // Remove the specified aracBilgisi
+                aracBilgileri.removeIf(arac -> {
+                    String bilgi = arac.getBilgi();
+                    return bilgi != null && bilgi.equals(aracBilgisi);
+                });
+
                 JOptionPane.showMessageDialog(null, "Araç başarıyla çıkarıldı.");
             }
         });
@@ -434,8 +548,7 @@ class AdminPage extends JFrame {
         setSize(600, 400);
         setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
 
-        firmaListesi.add(new Firma("user1", "password1"));
-        firmaListesi.add(new Firma("user2", "password2"));
+
         // Add more entries as needed
         hizmetBedeli = 1000.0; // Sabit hizmet bedeli
 
@@ -476,20 +589,23 @@ class AdminPage extends JFrame {
                 String yeniFirmaAdi = JOptionPane.showInputDialog("Yeni firma adını girin:");
                 String yeniFirmaSifre = JOptionPane.showInputDialog("Firma şifresini giriniz:");
 
-                // Yeni firma oluşturuluyor
-                Firma yeniFirma = new Firma(yeniFirmaAdi, yeniFirmaSifre);
-
-                // Yeni firma kaydedilirken firma bilgileri kontrol ediliyor
-                if (firmaListesi.stream().anyMatch(f -> f.girisYap(yeniFirmaAdi, yeniFirmaSifre)) ||
-                        firmaListesi.stream().anyMatch(f -> f.getFirmaAdi().equals(yeniFirmaAdi))) {
-                    JOptionPane.showMessageDialog(null, "Bu kullanıcı adı zaten mevcut veya hatalı şifre.");
+                // Check if the username already exists
+                if (firmaListesi.stream().anyMatch(f -> f.getFirmaAdi().equals(yeniFirmaAdi))) {
+                    JOptionPane.showMessageDialog(null, "Bu kullanıcı adı zaten mevcut.");
                 } else {
-                    firmaListesi.add(yeniFirma);
-                    JOptionPane.showMessageDialog(null, "Yeni firma başarıyla kaydedildi.");
+                    // Yeni firma oluşturuluyor
+                    Firma yeniFirma = new Firma(yeniFirmaAdi, yeniFirmaSifre);
+
+                    // Yeni firma kaydedilirken firma bilgileri kontrol ediliyor
+                    if (firmaListesi.stream().anyMatch(f -> f.girisYap(yeniFirmaAdi, yeniFirmaSifre))) {
+                        JOptionPane.showMessageDialog(null, "Hatalı şifre.");
+                    } else {
+                        firmaListesi.add(yeniFirma);
+                        JOptionPane.showMessageDialog(null, "Yeni firma başarıyla kaydedildi.");
+                    }
                 }
             }
         });
-
         btnFirmaSil.addActionListener(new ActionListener() {
             @Override
             public void actionPerformed(ActionEvent e) {
@@ -546,6 +662,7 @@ class AdminPage extends JFrame {
     }
 
     public static void main(String[] args) {
+
         SwingUtilities.invokeLater(new Runnable() {
             @Override
             public void run() {
@@ -694,6 +811,84 @@ class Sefer {
     public int getBosKoltukSayisi() {
         return bosKoltukSayisi;
     }
+}
+
+class Route {
+    private Map<String, String> rota = new HashMap<>();
+
+    public Route(String kalkis, String varis, String mesafe) {
+        rota.put("kalkis", kalkis);
+        rota.put("varis", varis);
+        rota.put("mesafe", mesafe);
+    }
+
+    // Getter ve Setter metodları eklenebilir
+    public Map<String, String> getRota() {
+        return rota;
+    }
+
+    public void setRota(Map<String, String> rota) {
+        this.rota = rota;
+    }
+
+}
+
+
+class Trip
+{
+    private Object arac;
+    private String guzergah;
+    private String zaman;
+    private double fiyat;
+
+    public Trip(Object arac, String guzergah, String zaman, double fiyat) {
+        this.arac = arac;
+        this.guzergah = guzergah;
+        this.zaman = zaman;
+        this.fiyat = fiyat;
+    }
+
+    public Object getArac() {
+        return arac;
+    }
+
+    public void setArac(String arac) {
+        this.arac = arac;
+    }
+
+    public String getGuzergah() {
+        return guzergah;
+    }
+
+    public void setGuzergah(String guzergah) {
+        this.guzergah = guzergah;
+    }
+
+    public String getZaman() {
+        return zaman;
+    }
+
+    public void setZaman(String zaman) {
+        this.zaman = zaman;
+    }
+
+    public double getFiyat() {
+        return fiyat;
+    }
+
+    public void setFiyat(double fiyat) {
+        this.fiyat = fiyat;
+    }
+
+    public String toString() {
+        return "Trip{" +
+                "arac='" + arac + '\'' +
+                ", guzergah='" + guzergah + '\'' +
+                ", zaman=" + zaman +
+                ", fiyat=" + fiyat +
+                '}';
+    }
+
 }
 
 class RezervasyonSayfasi extends JFrame {

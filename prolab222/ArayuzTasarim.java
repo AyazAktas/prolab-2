@@ -486,13 +486,6 @@ class AdminPage extends JFrame {
                 } else {
                     firmaListesi.add(yeniFirma);
                     JOptionPane.showMessageDialog(null, "Yeni firma başarıyla kaydedildi.");
-
-                    // Check login for the newly added firm
-                    if (yeniFirma.girisYap(yeniFirmaAdi, yeniFirmaSifre)) {
-                        JOptionPane.showMessageDialog(null, "Yeni firma girişi başarılı.");
-                    } else {
-                        JOptionPane.showMessageDialog(null, "Hatalı şifre.");
-                    }
                 }
             }
         });

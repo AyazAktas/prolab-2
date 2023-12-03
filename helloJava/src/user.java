@@ -32,19 +32,24 @@ public abstract class user extends JFrame implements ILoginable{
             public void actionPerformed(ActionEvent e) {
                 String girilenKullaniciAdi = kullaniciAlani.getText();
                 String girilenSifre = new String(sifreAlani.getPassword());
-
-                if (girilenKullaniciAdi.equals(kullaniciAdi) && girilenSifre.equals(sifre)) {
-                    JOptionPane.showMessageDialog(null, "Giriş Başarılı");
-                    // Burada giriş başarılı olduğunda yapılacak işlemleri ekleyebilirsiniz.
-                    // Örneğin, yeni bir pencere açabilir veya başka bir işlem gerçekleştirebilirsiniz.
+                if(sifreKontrol(girilenKullaniciAdi, girilenSifre)>=0){
                     cerceve.dispose(); // Giriş ekranını kapat
-                    page();
-                } else {
+                    company kullanici = new company();
+                    kullanici = (company) admin.firmaListesi.get(sifreKontrol(girilenKullaniciAdi, girilenSifre));
+                    kullanici.page(kullanici);
+                }
+                else if(sifreKontrol(girilenKullaniciAdi, girilenSifre)==-2){
+                    cerceve.dispose(); // Giriş ekranını kapat
+                    admin kullanici = new admin();
+                    kullanici.page(kullanici);
+                }
+                else {
                     JOptionPane.showMessageDialog(null, "Hatalı Kullanıcı Adı veya Şifre");
                 }
             }
         });
 
         cerceve.setVisible(true);}
-    abstract void page();
+
+    abstract int sifreKontrol(String girilenKullaniciAdi, String girilenSifre);
 }

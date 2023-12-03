@@ -8,15 +8,12 @@ public class admin extends user{
 
     private String kullaniciAdi = "admin";
     private String sifre = "admin123";
-    private List<company> firmaListesi;
-    private double hizmetBedeli;
+    public static List<company> firmaListesi = new ArrayList<company>();
+    private static double hizmetBedeli;
 
-    public admin() {
-        firmaListesi = new ArrayList<>();
-    }
 
-    @Override
-    public void page() {
+
+    public void page(admin kullanici) {
         JFrame cerceve = new JFrame("Yönetici Sayfası");
         cerceve.setSize(600, 400);
         cerceve.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
@@ -25,11 +22,13 @@ public class admin extends user{
         JButton btnYeniFirma = new JButton("Yeni Firma Kaydı");
         JButton btnFirmaSil = new JButton("Firma Sil");
         JButton btnHizmetBedeliBelirle = new JButton("Hizmet Bedeli Belirle");
+        JButton btnGeri = new JButton("Geri");
 
         panel.add(btnGoruntule);
         panel.add(btnYeniFirma);
         panel.add(btnFirmaSil);
         panel.add(btnHizmetBedeliBelirle);
+        panel.add(btnGeri);
 
         cerceve.add(panel); // Paneli JFrame'e ekle
         cerceve.setVisible(true); // JFrame'i görünür yap
@@ -59,7 +58,7 @@ public class admin extends user{
                 company.kullaniciAdi = yeniFirmauser;
                 String yeniFirmaPassword = JOptionPane.showInputDialog("Yeni firma şifresini girin:");
                 company.sifre = yeniFirmaPassword;
-                firmaListesi.add(company);
+                admin.firmaListesi.add(company);
                 JOptionPane.showMessageDialog(null, "Yeni firma başarıyla kaydedildi.");
             }
         });
@@ -97,6 +96,32 @@ public class admin extends user{
                 }
             }
         });
+
+        btnGeri.addActionListener(new ActionListener() {
+            @Override
+            public void actionPerformed(ActionEvent e) {
+                cerceve.dispose(); // Close the current frame
+                SwingUtilities.invokeLater(new Runnable() {
+                    @Override
+                    public void run() {
+                        // Open the new frame
+                        new ArayuzTasarim().setVisible(true);
+                    }
+                });
+            }
+        });
     }
 
+    @Override
+    int sifreKontrol(String girilenKullaniciAdi, String girilenSifre) {
+        if (girilenKullaniciAdi.equals(kullaniciAdi) && girilenSifre.equals(sifre)) {
+            JOptionPane.showMessageDialog(null, "Giriş Başarılı");
+            // Burada giriş başarılı olduğunda yapılacak işlemleri ekleyebilirsiniz.
+            // Örneğin, yeni bir pencere açabilir veya başka bir işlem gerçekleştirebilirsiniz.
+            return -2;
+        }
+        else{
+            return -1;
+        }
+    }
 }

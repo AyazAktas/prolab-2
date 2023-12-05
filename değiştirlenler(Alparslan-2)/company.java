@@ -179,8 +179,8 @@ public class company extends user implements IProfitable{
         btnBirimYakitMaliyeti.addActionListener(new ActionListener() {
             @Override
             public void actionPerformed(ActionEvent e) {
-                String[] turSecenekleri2 = {"Benzin", "Motorin", "Elektrik","Gaz"};
-                String yakitTuru= (String) JOptionPane.showInputDialog(
+                String[] turSecenekleri2 = {"Benzin", "Motorin", "Elektrik", "Gaz"};
+                String yakitTuru = (String) JOptionPane.showInputDialog(
                         null,
                         "Yakıt Türü Seçin:",
                         "Tür Seçimi",
@@ -189,26 +189,25 @@ public class company extends user implements IProfitable{
                         turSecenekleri2,
                         turSecenekleri2[0]
                 );
-                if (yakitTuru.equals("Benzin")) {
-                    birimBenzinFiyati= Integer.parseInt(JOptionPane.showInputDialog("Birim Benzin Fiyatını Girin:"));
-                    JOptionPane.showMessageDialog(null, "Benzin Fiyatı : " +birimBenzinFiyati + " TL");
+                if (yakitTuru != null) {
+                    if (yakitTuru.equals("Benzin")) {
+                        birimBenzinFiyati = Integer.parseInt(JOptionPane.showInputDialog("Birim Benzin Fiyatını Girin:"));
+                        JOptionPane.showMessageDialog(null, "Benzin Fiyatı : " + birimBenzinFiyati + " TL");
 
-                }
-                else if (yakitTuru.equals("Motorin")) {
-                    birimMotorinFiyati= Integer.parseInt(JOptionPane.showInputDialog("Birim Motorin Fiyatı Girin:"));
-                    JOptionPane.showMessageDialog(null, "Motorin Fiyatı : " +birimMotorinFiyati + " TL");
-                }
-                else if(yakitTuru.equals("Elektrik")){
-                    birimElektrikFiyati= Integer.parseInt(JOptionPane.showInputDialog("Birim Elektrik Fiyatı Girin:"));
-                    JOptionPane.showMessageDialog(null, "Elektrik Fiyatı : " +birimElektrikFiyati + " TL");
-                }
-                else if(yakitTuru.equals("Gaz")){
-                    birimGazFiyati= Integer.parseInt(JOptionPane.showInputDialog("Birim Gaz Fiyatı Girin:"));
-                    JOptionPane.showMessageDialog(null, "Gaz Fiyatı : " +birimGazFiyati + " TL");
+                    } else if (yakitTuru.equals("Motorin")) {
+                        birimMotorinFiyati = Integer.parseInt(JOptionPane.showInputDialog("Birim Motorin Fiyatı Girin:"));
+                        JOptionPane.showMessageDialog(null, "Motorin Fiyatı : " + birimMotorinFiyati + " TL");
+                    } else if (yakitTuru.equals("Elektrik")) {
+                        birimElektrikFiyati = Integer.parseInt(JOptionPane.showInputDialog("Birim Elektrik Fiyatı Girin:"));
+                        JOptionPane.showMessageDialog(null, "Elektrik Fiyatı : " + birimElektrikFiyati + " TL");
+                    } else if (yakitTuru.equals("Gaz")) {
+                        birimGazFiyati = Integer.parseInt(JOptionPane.showInputDialog("Birim Gaz Fiyatı Girin:"));
+                        JOptionPane.showMessageDialog(null, "Gaz Fiyatı : " + birimGazFiyati + " TL");
+                    }
                 }
             }
         });
-        
+
 
         btnGunlukKarHesapla.addActionListener(new ActionListener() {
             @Override
@@ -251,16 +250,16 @@ public class company extends user implements IProfitable{
                     }
                     else if(tur.equals("Tren")){
                         if(trenAraclari.isEmpty()){
-                        JOptionPane.showMessageDialog(null,"Araç bulunmamaktadır");
-                    }
-                    else {
-                        StringBuilder yazacakYazi = new StringBuilder();
-                        for(int i = 0; i < trenAraclari.size();i++){
-                            yazacakYazi.append("id: ").append(trenAraclari.get(i).id);
+                            JOptionPane.showMessageDialog(null,"Araç bulunmamaktadır");
                         }
-                        yazacakYazi.toString();
-                        JOptionPane.showMessageDialog(null,yazacakYazi);
-                    }
+                        else {
+                            StringBuilder yazacakYazi = new StringBuilder();
+                            for(int i = 0; i < trenAraclari.size();i++){
+                                yazacakYazi.append("id: ").append(trenAraclari.get(i).id);
+                            }
+                            yazacakYazi.toString();
+                            JOptionPane.showMessageDialog(null,yazacakYazi);
+                        }
 
                     } else if (tur.equals("Otobüs")) {
                         if(karaAraclari.isEmpty()){
@@ -294,148 +293,148 @@ public class company extends user implements IProfitable{
                         turSecenekleri[0]
                 );
                 if(tur != null){
-                Trip trip = new Trip();
-                if(tur.equals("Hava yolu")){
-                    String[] idList = new String[10];
-                    if(havaAraclari != null) {
-                        for (int i = 0; i < havaAraclari.size(); i++) {
-                            idList[i] = havaAraclari.get(i).id;
+                    Trip trip = new Trip();
+                    if(tur.equals("Hava yolu")){
+                        String[] idList = new String[10];
+                        if(havaAraclari != null) {
+                            for (int i = 0; i < havaAraclari.size(); i++) {
+                                idList[i] = havaAraclari.get(i).id;
+                            }
+                            String arac = (String) JOptionPane.showInputDialog(
+                                    null,
+                                    "Sefere hangi uçak kullanılacağını seçin:",
+                                    "Araç Seçimi",
+                                    JOptionPane.QUESTION_MESSAGE,
+                                    null,
+                                    idList,
+                                    idList[0]
+                            );
+                            if(arac != null){
+                                int selectedIndexOfIdList = Arrays.asList(idList).indexOf(arac);
+                                trip.arac = havaAraclari.get(selectedIndexOfIdList);
+                                String[] seferSecenekleri = new String[]{"İstanbul - Konya - İstanbul", "İstanbul - Ankara - İstanbul"};
+                                String sefer = (String) JOptionPane.showInputDialog(
+                                        null,
+                                        "Hangi güzergahı kullanacaksınız?",
+                                        "Güzergah Seçimi",
+                                        JOptionPane.QUESTION_MESSAGE,
+                                        null,
+                                        seferSecenekleri,
+                                        seferSecenekleri[0]
+                                );
+                                if(sefer !=null){
+                                    trip.guzergah = new ArrayList<>();
+                                    trip.guzergah = trip.guzergahBul(sefer);
+                                    String[] seferTarihleri = new String[]{"4 Aralık 2023", "5 Aralık 2023", "6 Aralık 2023",
+                                            "7 Aralık 2023", "8 Aralık 2023", "9 Aralık 2023", "10 Aralık 2023"};
+                                    String secilenTarih = (String) JOptionPane.showInputDialog(
+                                            null,
+                                            "Hangi tarihte sefer başlayacak",
+                                            "Tarih Seçimi",
+                                            JOptionPane.QUESTION_MESSAGE,
+                                            null,
+                                            seferTarihleri,
+                                            seferTarihleri[0]
+                                    );
+                                    if(secilenTarih != null){
+                                        trip.tarih = secilenTarih;
+                                        seyahatBilgileri.add(trip);
+                                        JOptionPane.showMessageDialog(null, "Sefer başarıyla eklendi.");
+                                    }}}}
+
+                    }
+                    else if (tur.equals("Demir yolu")) {
+                        String[] idList = new String[10];
+                        for(int i =0; i<trenAraclari.size(); i++){
+                            idList[i] = trenAraclari.get(i).id;
                         }
                         String arac = (String) JOptionPane.showInputDialog(
                                 null,
-                                "Sefere hangi uçak kullanılacağını seçin:",
+                                "Sefere hangi tren kullanılacağını seçin:",
                                 "Araç Seçimi",
                                 JOptionPane.QUESTION_MESSAGE,
                                 null,
                                 idList,
                                 idList[0]
-                        );
-                        if(arac != null){
-                        int selectedIndexOfIdList = Arrays.asList(idList).indexOf(arac);
-                        trip.arac = havaAraclari.get(selectedIndexOfIdList);
-                        String[] seferSecenekleri = new String[]{"İstanbul - Konya - İstanbul", "İstanbul - Ankara - İstanbul"};
-                        String sefer = (String) JOptionPane.showInputDialog(
+                        );if(arac != null) {
+                            int selectedIndexOfIdList = Arrays.asList(idList).indexOf(arac);
+                            trip.arac = trenAraclari.get(selectedIndexOfIdList);
+                            String[] seferSecenekleri = new String[]{"İstanbul - Kocaeli - Bilecik - Eskişehir - Ankara - Eskişehir\n" +
+                                    "- Bilecik - Kocaeli - İstanbul", "İstanbul - Kocaeli - Bilecik - Eskişehir - Konya - Eskişehir\n" +
+                                    "- Bilecik - Kocaeli - İstanbul"};
+                            String sefer = (String) JOptionPane.showInputDialog(
+                                    null,
+                                    "Hangi güzergahı kullanacaksınız?",
+                                    "Güzergah Seçimi",
+                                    JOptionPane.QUESTION_MESSAGE,
+                                    null,
+                                    seferSecenekleri,
+                                    seferSecenekleri[0]
+                            );if(sefer != null){
+                                trip.guzergah = new ArrayList<>();
+                                trip.guzergah = trip.guzergahBul(sefer);
+                                String[] seferTarihleri = new String[]{"4 Aralık 2023", "5 Aralık 2023", "6 Aralık 2023",
+                                        "7 Aralık 2023", "8 Aralık 2023", "9 Aralık 2023", "10 Aralık 2023"};
+                                String secilenTarih = (String) JOptionPane.showInputDialog(
+                                        null,
+                                        "Hangi tarihte sefer başlayacak",
+                                        "Tarih Seçimi",
+                                        JOptionPane.QUESTION_MESSAGE,
+                                        null,
+                                        seferTarihleri,
+                                        seferTarihleri[0]
+                                );
+                                if(secilenTarih != null){
+                                    trip.tarih = secilenTarih;
+                                    seyahatBilgileri.add(trip);
+                                    JOptionPane.showMessageDialog(null, "Sefer başarıyla eklendi.");
+                                }}}
+                    } else if (tur.equals("Kara yolu")) {
+                        String[] idList = new String[10];
+                        for(int i =0; i<karaAraclari.size(); i++){
+                            idList[i] = karaAraclari.get(i).id;
+                        }
+                        String arac = (String) JOptionPane.showInputDialog(
                                 null,
-                                "Hangi güzergahı kullanacaksınız?",
-                                "Güzergah Seçimi",
+                                "Sefere hangi otobüs kullanılacağını seçin:",
+                                "Araç Seçimi",
                                 JOptionPane.QUESTION_MESSAGE,
                                 null,
-                                seferSecenekleri,
-                                seferSecenekleri[0]
-                        );
-                        if(sefer !=null){
-                        trip.guzergah = new ArrayList<>();
-                        trip.guzergah = trip.guzergahBul(sefer);
-                        String[] seferTarihleri = new String[]{"4 Aralık 2023", "5 Aralık 2023", "6 Aralık 2023",
-                                "7 Aralık 2023", "8 Aralık 2023", "9 Aralık 2023", "10 Aralık 2023"};
-                        String secilenTarih = (String) JOptionPane.showInputDialog(
-                                null,
-                                "Hangi tarihte sefer başlayacak",
-                                "Tarih Seçimi",
-                                JOptionPane.QUESTION_MESSAGE,
-                                null,
-                                seferTarihleri,
-                                seferTarihleri[0]
-                        );
-                        if(secilenTarih != null){
-                        trip.tarih = secilenTarih;
-                        seyahatBilgileri.add(trip);
-                        JOptionPane.showMessageDialog(null, "Sefer başarıyla eklendi.");
-                    }}}}
-
-                }
-                else if (tur.equals("Demir yolu")) {
-                    String[] idList = new String[10];
-                    for(int i =0; i<trenAraclari.size(); i++){
-                        idList[i] = trenAraclari.get(i).id;
-                    }
-                    String arac = (String) JOptionPane.showInputDialog(
-                            null,
-                            "Sefere hangi tren kullanılacağını seçin:",
-                            "Araç Seçimi",
-                            JOptionPane.QUESTION_MESSAGE,
-                            null,
-                            idList,
-                            idList[0]
-                    );if(arac != null) {
-                        int selectedIndexOfIdList = Arrays.asList(idList).indexOf(arac);
-                        trip.arac = trenAraclari.get(selectedIndexOfIdList);
-                        String[] seferSecenekleri = new String[]{"İstanbul - Kocaeli - Bilecik - Eskişehir - Ankara - Eskişehir\n" +
-                                "- Bilecik - Kocaeli - İstanbul", "İstanbul - Kocaeli - Bilecik - Eskişehir - Konya - Eskişehir\n" +
-                                "- Bilecik - Kocaeli - İstanbul"};
-                        String sefer = (String) JOptionPane.showInputDialog(
-                                null,
-                                "Hangi güzergahı kullanacaksınız?",
-                                "Güzergah Seçimi",
-                                JOptionPane.QUESTION_MESSAGE,
-                                null,
-                                seferSecenekleri,
-                                seferSecenekleri[0]
-                        );if(sefer != null){
-                        trip.guzergah = new ArrayList<>();
-                        trip.guzergah = trip.guzergahBul(sefer);
-                        String[] seferTarihleri = new String[]{"4 Aralık 2023", "5 Aralık 2023", "6 Aralık 2023",
-                                "7 Aralık 2023", "8 Aralık 2023", "9 Aralık 2023", "10 Aralık 2023"};
-                        String secilenTarih = (String) JOptionPane.showInputDialog(
-                                null,
-                                "Hangi tarihte sefer başlayacak",
-                                "Tarih Seçimi",
-                                JOptionPane.QUESTION_MESSAGE,
-                                null,
-                                seferTarihleri,
-                                seferTarihleri[0]
-                        );
-                        if(secilenTarih != null){
-                        trip.tarih = secilenTarih;
-                        seyahatBilgileri.add(trip);
-                        JOptionPane.showMessageDialog(null, "Sefer başarıyla eklendi.");
-                    }}}
-                } else if (tur.equals("Kara yolu")) {
-                    String[] idList = new String[10];
-                    for(int i =0; i<karaAraclari.size(); i++){
-                        idList[i] = karaAraclari.get(i).id;
-                    }
-                    String arac = (String) JOptionPane.showInputDialog(
-                            null,
-                            "Sefere hangi otobüs kullanılacağını seçin:",
-                            "Araç Seçimi",
-                            JOptionPane.QUESTION_MESSAGE,
-                            null,
-                            idList,
-                            idList[0]
-                    );if(arac!=null){
-                    int selectedIndexOfIdList = Arrays.asList(idList).indexOf(arac);
-                    trip.arac = karaAraclari.get(selectedIndexOfIdList);
-                    String[] seferSecenekleri= new String[]{"İstanbul - Kocaeli - Ankara - Kocaeli - İstanbul - Kocaeli\n" +
-                            "- Ankara - Kocaeli - İstanbul", "İstanbul - Kocaeli - Eskişehir - Konya - Eskişehir - Kocaeli\n" +
-                            "-\n" +
-                            "İstanbul"};
-                    String sefer = (String) JOptionPane.showInputDialog(
-                            null,
-                            "Hangi güzergahı kullanacaksınız?",
-                            "Güzergah Seçimi",
-                            JOptionPane.QUESTION_MESSAGE,
-                            null,
-                            seferSecenekleri,
-                            seferSecenekleri[0]
-                    );if(sefer!=null){
-                    trip.guzergah = new ArrayList<>();
-                    trip.guzergah = trip.guzergahBul(sefer);
-                    String[] seferTarihleri= new String[]{"4 Aralık 2023","5 Aralık 2023","6 Aralık 2023",
-                            "7 Aralık 2023","8 Aralık 2023","9 Aralık 2023","10 Aralık 2023"};
-                    String secilenTarih = (String) JOptionPane.showInputDialog(
-                            null,
-                            "Hangi tarihte sefer başlayacak",
-                            "Tarih Seçimi",
-                            JOptionPane.QUESTION_MESSAGE,
-                            null,
-                            seferTarihleri,
-                            seferTarihleri[0]
-                    );if(secilenTarih != null){
-                    trip.tarih = secilenTarih;
-                    seyahatBilgileri.add(trip);
-                    JOptionPane.showMessageDialog(null,"Sefer başarıyla eklendi.");
-                }}}}
+                                idList,
+                                idList[0]
+                        );if(arac!=null){
+                            int selectedIndexOfIdList = Arrays.asList(idList).indexOf(arac);
+                            trip.arac = karaAraclari.get(selectedIndexOfIdList);
+                            String[] seferSecenekleri= new String[]{"İstanbul - Kocaeli - Ankara - Kocaeli - İstanbul - Kocaeli\n" +
+                                    "- Ankara - Kocaeli - İstanbul", "İstanbul - Kocaeli - Eskişehir - Konya - Eskişehir - Kocaeli\n" +
+                                    "-\n" +
+                                    "İstanbul"};
+                            String sefer = (String) JOptionPane.showInputDialog(
+                                    null,
+                                    "Hangi güzergahı kullanacaksınız?",
+                                    "Güzergah Seçimi",
+                                    JOptionPane.QUESTION_MESSAGE,
+                                    null,
+                                    seferSecenekleri,
+                                    seferSecenekleri[0]
+                            );if(sefer!=null){
+                                trip.guzergah = new ArrayList<>();
+                                trip.guzergah = trip.guzergahBul(sefer);
+                                String[] seferTarihleri= new String[]{"4 Aralık 2023","5 Aralık 2023","6 Aralık 2023",
+                                        "7 Aralık 2023","8 Aralık 2023","9 Aralık 2023","10 Aralık 2023"};
+                                String secilenTarih = (String) JOptionPane.showInputDialog(
+                                        null,
+                                        "Hangi tarihte sefer başlayacak",
+                                        "Tarih Seçimi",
+                                        JOptionPane.QUESTION_MESSAGE,
+                                        null,
+                                        seferTarihleri,
+                                        seferTarihleri[0]
+                                );if(secilenTarih != null){
+                                    trip.tarih = secilenTarih;
+                                    seyahatBilgileri.add(trip);
+                                    JOptionPane.showMessageDialog(null,"Sefer başarıyla eklendi.");
+                                }}}}
                 }
             }
         });

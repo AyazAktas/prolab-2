@@ -4,10 +4,11 @@ import java.util.List;
 public class Trip {
     Vehicle arac;
     Route sefer;
-    List<String>guzergah;
+    List<String>guzergah = new ArrayList<>();
     String tarih;
 
     int koltukSayisi;
+
     int bosKoltuk;
     int yolUzunlugu;
     Trip(){

@@ -29,6 +29,7 @@ public class company extends user implements IProfitable{
         JButton btnAracCikar = new JButton("Araç Çıkar");
         JButton btnGunlukKarHesapla = new JButton("Günlük Kar Hesapla");
         JButton btnAraclariListele = new JButton("Araçları Listele");
+        JButton btnSeferleriGoruntule = new JButton("Seferleri Görüntüle");
         JButton btnSeferEkle = new JButton("Sefer Ekle");
         JButton btnSeferOlustur= new JButton("Sefer Oluştur");
         JButton btnGeri = new JButton("Geri");
@@ -36,10 +37,11 @@ public class company extends user implements IProfitable{
         panel.add(btnAracEkle);
         panel.add(btnAracCikar);
         panel.add(btnAraclariListele);
-        panel.add(btnGunlukKarHesapla);
-        panel.add(btnBirimYakitMaliyeti);
+        panel.add(btnSeferleriGoruntule);
         panel.add(btnSeferEkle);
         panel.add(btnSeferOlustur);
+        panel.add(btnGunlukKarHesapla);
+        panel.add(btnBirimYakitMaliyeti);
         panel.add(btnGeri);
 
 
@@ -169,9 +171,43 @@ public class company extends user implements IProfitable{
                             havaAraclari.remove(havaAraclari.get(selectedIndex));
                         }
 
-                    } else if (tur.equals("Tren")) {
+                    } else if (tur.equals("Tren")) {String[] idList = new String[trenAraclari.size()];
+                        for (int i = 0; i < trenAraclari.size(); i++) {
+                            idList[i] = trenAraclari.get(i).id;
+                        }
+                        String arac = (String) JOptionPane.showInputDialog(
+                                null,
+                                "Hangi trenin silineceğini seçin:",
+                                "Silinecek Tren Seçimi",
+                                JOptionPane.QUESTION_MESSAGE,
+                                null,
+                                idList,
+                                idList[0]
+                        );
+                        //araçın indexini bulmak için
+                        if (arac != null) {
+                            int selectedIndex = Arrays.asList(idList).indexOf(arac);
+                            trenAraclari.remove(trenAraclari.get(selectedIndex));
+                        }
 
-                    } else if (tur.equals("Otobüs")) {
+                    } else if (tur.equals("Otobüs")) {String[] idList = new String[karaAraclari.size()];
+                        for (int i = 0; i < karaAraclari.size(); i++) {
+                            idList[i] = karaAraclari.get(i).id;
+                        }
+                        String arac = (String) JOptionPane.showInputDialog(
+                                null,
+                                "Hangi otobüsün silineceğini seçin:",
+                                "Silinecek Otobüs Seçimi",
+                                JOptionPane.QUESTION_MESSAGE,
+                                null,
+                                idList,
+                                idList[0]
+                        );
+                        //araçın indexini bulmak için
+                        if (arac != null) {
+                            int selectedIndex = Arrays.asList(idList).indexOf(arac);
+                            karaAraclari.remove(karaAraclari.get(selectedIndex));
+                        }
 
                     }
                     JOptionPane.showMessageDialog(null, "Araç başarıyla çıkarıldı.");
@@ -280,6 +316,40 @@ public class company extends user implements IProfitable{
                 }
             }
         });
+
+        btnSeferleriGoruntule.addActionListener(new ActionListener() {
+            @Override
+            public void actionPerformed(ActionEvent e) {
+                company currentCompany = ArayuzTasarim.getCurrentLoggedInCompany();
+
+                if (currentCompany != null) {
+                    List<Trip> seyahatBilgileri = currentCompany.seyahatBilgileri;
+
+                    if (!seyahatBilgileri.isEmpty()) {
+                        for (Trip trip : seyahatBilgileri) {
+                            // Check for null values in trip fields to avoid NullPointerException
+                            String guzergah = trip.guzergah != null ? trip.guzergah.toString() : "N/A";
+                            String aracInfo = trip.arac != null ? trip.arac.toString() : "N/A";
+                            String tarih = trip.tarih != null ? trip.tarih : "N/A";
+                            String seferInfo = trip.sefer != null ? trip.sefer.toString() : "N/A";
+
+                            JOptionPane.showMessageDialog(null,
+                                    "Oluşturulan Sefer: " + guzergah +
+                                            "\nAraç: " + aracInfo +
+                                            "\nTarih: " + tarih +
+                                            "\nToplam Mesafe: " + trip.yolUzunlugu + " km" +
+                                            "\nKoltuk Sayısı: " + trip.koltukSayisi +
+                                            "\nBoş Koltuk Sayısı: " + trip.bosKoltuk +
+                                            "\nRota: " + seferInfo);
+                        }
+                    } else {
+                        JOptionPane.showMessageDialog(null, "Bu firma için seyahat bilgisi bulunmamaktadır.");
+                    }
+                }
+            }
+        });
+
+
 
         btnSeferEkle.addActionListener(new ActionListener() {
             @Override

@@ -41,7 +41,7 @@ public class admin extends user{
                 } else {
                     String firmalar = "";
                     for (company firma : firmaListesi) {
-                        firmalar += firma.getFirmaAdi() + "\n";
+                        firmalar += firma.kullaniciAdi + "\n";
                     }
                     JOptionPane.showMessageDialog(null, "Firmalar:\n" + firmalar);
                 }

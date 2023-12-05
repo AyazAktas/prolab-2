@@ -7,7 +7,13 @@ import java.awt.GridLayout;
 
 
 public class ArayuzTasarim extends JFrame {
-
+    private static company currentLoggedInCompany;
+    public static company getCurrentLoggedInCompany() {
+        return currentLoggedInCompany;
+    }
+    public static void setCurrentLoggedInCompany(company company) {
+        currentLoggedInCompany = company;
+    }
     public ArayuzTasarim() {
         setTitle("Giriş Ekranı");
         setSize(400, 200);
@@ -60,8 +66,9 @@ public class ArayuzTasarim extends JFrame {
                 SwingUtilities.invokeLater(new Runnable() {
                     @Override
                     public void run() {
-                        user company = new company();
-                        company.login();
+                        company currentCompany = new company();
+                        currentCompany.login();
+                        setCurrentLoggedInCompany(currentCompany);
                     }
                 });
             }

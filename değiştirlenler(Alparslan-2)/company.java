@@ -145,34 +145,35 @@ public class company extends user implements IProfitable{
                         turSecenekleri,
                         turSecenekleri[0]
                 );
-                //Uçakları listele
-                if(tur.equals("Uçak")){
-                    String[] idList = new String[havaAraclari.size()];
-                    for(int i =0; i<havaAraclari.size(); i++){
-                        idList[i] = havaAraclari.get(i).id;
+                if (tur != null) {
+                    //Uçakları listele
+                    if (tur.equals("Uçak")) {
+                        String[] idList = new String[havaAraclari.size()];
+                        for (int i = 0; i < havaAraclari.size(); i++) {
+                            idList[i] = havaAraclari.get(i).id;
+                        }
+                        String arac = (String) JOptionPane.showInputDialog(
+                                null,
+                                "Hangi uçağın silineceğini seçin:",
+                                "Silinecek Uçak Seçimi",
+                                JOptionPane.QUESTION_MESSAGE,
+                                null,
+                                idList,
+                                idList[0]
+                        );
+                        //araçın indexini bulmak için
+                        if (arac != null) {
+                            int selectedIndex = Arrays.asList(idList).indexOf(arac);
+                            havaAraclari.remove(havaAraclari.get(selectedIndex));
+                        }
+
+                    } else if (tur.equals("Tren")) {
+
+                    } else if (tur.equals("Otobüs")) {
+
                     }
-                    String arac = (String) JOptionPane.showInputDialog(
-                            null,
-                            "Hangi uçağın silineceğini seçin:",
-                            "Silinecek Uçak Seçimi",
-                            JOptionPane.QUESTION_MESSAGE,
-                            null,
-                            idList,
-                            idList[0]
-                    );
-                    //araçın indexini bulmak için
-                    if (arac != null) {
-                        int selectedIndex = Arrays.asList(idList).indexOf(arac);
-                        havaAraclari.remove(havaAraclari.get(selectedIndex));
-                    }
-
+                    JOptionPane.showMessageDialog(null, "Araç başarıyla çıkarıldı.");
                 }
-                else if (tur.equals("Tren")) {
-
-                } else if (tur.equals("Otobüs")) {
-
-                }
-                JOptionPane.showMessageDialog(null, "Araç başarıyla çıkarıldı.");
             }
         });
 

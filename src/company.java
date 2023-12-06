@@ -5,14 +5,21 @@ import java.awt.event.ActionListener;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
-
+import java.util.Random;
 public class company extends user implements IProfitable{
 
     String firmaAdi;
+    public  int hizmetBedeli=1000;
     public List<Bus> karaAraclari = new ArrayList<>();
     public List<Airplane> havaAraclari = new ArrayList<>();
     public List<Train> trenAraclari = new ArrayList<>();
     Route route= new Route();
+
+    public static int aracPersonelSayisi=2;
+    public static int hizmetliPersonelSayisi=2;
+
+    public int seferBasiAracPersonelUcreti;
+    public int seferBasiHizmetPersonelUcreti;
     public  int birimElektrikFiyati;
     public int birimBenzinFiyati;
     public  int birimMotorinFiyati;
@@ -334,7 +341,7 @@ public class company extends user implements IProfitable{
                             String seferInfo = trip.sefer != null ? trip.sefer.toString() : "N/A";
 
                             JOptionPane.showMessageDialog(null,
-                                    "Oluşturulan Sefer: " + guzergah +
+                                    "Oluşturulan Sefer: " + trip.guzergah +
                                             "\nAraç: " + aracInfo +
                                             "\nTarih: " + tarih +
                                             "\nToplam Mesafe: " + trip.yolUzunlugu + " km" +
@@ -516,14 +523,18 @@ public class company extends user implements IProfitable{
             @Override
             public void actionPerformed(ActionEvent e) {
                 String[] sehirSecenekleri = {"İstanbul", "Kocaeli", "Ankara", "Eskişehir", "Konya", "Bilecik"};
-                String[] aracSecenekleri = {"Karayolu", "Demiryolu", "Havayolu"};
+                String[] aracSecenekleri = {"Kara yolu", "Demir yolu", "Hava yolu"};
                 String[] tarihSecenekleri = {"4 Aralık 2023", "5 Aralık 2023", "6 Aralık 2023", "7 Aralık 2023", "8 Aralık 2023", "9 Aralık 2023", "10 Aralık 2023"};
+                Integer[] idList2 = new Integer[10];
+                for (int i = 0; i < idList2.length; i++) {
+                    idList2[i] = new Random().nextInt(91) + 10; // 10 ile 100 arasında rastgele sayı
+                }
 
                 MesafeMatrisi mesafeMatrisi = new MesafeMatrisi();
                 Route guzergah = new Route(mesafeMatrisi);
                 String arac = (String) JOptionPane.showInputDialog(
                         null,
-                        "Bir araç seçin:",
+                        "Aracın türünü seçin:",
                         "Araç Seçimi",
                         JOptionPane.QUESTION_MESSAGE,
                         null,
@@ -532,7 +543,7 @@ public class company extends user implements IProfitable{
                 );
                 if (arac != null) {
                     Trip trip = new Trip();
-                    if (arac.equals("Karayolu")) {
+                    if (arac.equals("Kara yolu")) {
                         String[] idList = new String[10];
                         if (karaAraclari != null) {
                             for (int i = 0; i < karaAraclari.size(); i++) {
@@ -548,7 +559,14 @@ public class company extends user implements IProfitable{
                                     idList[0]
                             );
                             if (secilenArac != null) {
-
+                                Bus selectedVehicle = null;
+                                for (Bus karaAraci : karaAraclari) {
+                                    if (secilenArac.equals(karaAraci.id)) {
+                                        selectedVehicle = karaAraci;
+                                        trip.arac = selectedVehicle;
+                                        break;
+                                    }
+                                }
                                 while (true) {
                                     String sehir = (String) JOptionPane.showInputDialog(
                                             null,
@@ -563,7 +581,7 @@ public class company extends user implements IProfitable{
                                         // Kullanıcı Cancel butonuna tıkladı
                                         break;
                                     }
-
+                                    trip.guzergah.add(sehir);
                                     guzergah.sehirEkle(sehir);
                                 }
 
@@ -578,17 +596,31 @@ public class company extends user implements IProfitable{
                                         tarihSecenekleri,
                                         tarihSecenekleri[0]
                                 );
+                                trip.tarih=tarih;
+
+                                int seferId = (int) JOptionPane.showInputDialog(
+                                        null,
+                                        "Bir sefer Id'si seçin:",
+                                        "Id Seçimi",
+                                        JOptionPane.QUESTION_MESSAGE,
+                                        null,
+                                        idList2,
+                                        idList2[0]
+                                );
+
 
                                 // Güzerğahı al ve kullan
                                 String olusturulanGuzergah = guzergah.getRoute();
                                 int toplamMesafe = guzergah.toplamMesafe(arac);
-
+                                trip.yolUzunlugu =toplamMesafe;
                                 if (!olusturulanGuzergah.isEmpty()) {
+                                    seyahatBilgileri.add(trip);
                                     // olusturulanGuzergah'ı ve diğer bilgileri kullanarak gerekli işlemleri yap
                                     JOptionPane.showMessageDialog(null, "Oluşturulan Sefer: " + olusturulanGuzergah +
                                             "\nAraç: " + secilenArac +
                                             "\nTarih: " + tarih +
-                                            "\nToplam Mesafe: " + toplamMesafe + " km");
+                                            "\nToplam Mesafe: " + toplamMesafe + " km"+"\nKoltuk Sayısı: "+selectedVehicle.kapasite +"\nId: "+seferId);
+
                                     // Diğer sefer ekleme işlemleri buraya eklenir
                                 } else {
                                     // Kullanıcı hiç şehir seçmedi veya işlemi iptal etti
@@ -597,8 +629,9 @@ public class company extends user implements IProfitable{
                             }
                         }
                     }
-                    if (arac.equals("Demiryolu")) {
+                    if (arac.equals("Demir yolu")) {
                         String[] idList = new String[10];
+
                         if (trenAraclari != null) {
                             for (int i = 0; i < trenAraclari.size(); i++) {
                                 idList[i] = trenAraclari.get(i).id;
@@ -614,7 +647,14 @@ public class company extends user implements IProfitable{
                             );
                             if (secilenArac != null) {
 
-
+                                Train selectedVehicle = null;
+                                for (Train trenAraci : trenAraclari) {
+                                    if (secilenArac.equals(trenAraci.id)) {
+                                        selectedVehicle = trenAraci;
+                                        trip.arac=selectedVehicle;
+                                        break;
+                                    }
+                                }
                                 while (true) {
                                     String sehir = (String) JOptionPane.showInputDialog(
                                             null,
@@ -632,6 +672,8 @@ public class company extends user implements IProfitable{
                                     }
 
                                     guzergah.sehirEkle(sehir);
+                                    trip.guzergah.add(sehir);
+
                                 }
 
 
@@ -645,17 +687,30 @@ public class company extends user implements IProfitable{
                                         tarihSecenekleri,
                                         tarihSecenekleri[0]
                                 );
+                                trip.tarih = tarih;
+                                int seferId = (int) JOptionPane.showInputDialog(
+                                        null,
+                                        "Bir sefer Id'si seçin:",
+                                        "Id Seçimi",
+                                        JOptionPane.QUESTION_MESSAGE,
+                                        null,
+                                        idList2,
+                                        idList2[0]
+                                );
+
 
                                 // Güzerğahı al ve kullan
                                 String olusturulanGuzergah = guzergah.getRoute();
                                 int toplamMesafe = guzergah.toplamMesafe(arac);
+                                trip.yolUzunlugu=toplamMesafe;
 
                                 if (!olusturulanGuzergah.isEmpty()) {
                                     // olusturulanGuzergah'ı ve diğer bilgileri kullanarak gerekli işlemleri yap
+                                    seyahatBilgileri.add(trip);
                                     JOptionPane.showMessageDialog(null, "Oluşturulan Sefer: " + olusturulanGuzergah +
                                             "\nAraç: " + secilenArac +
                                             "\nTarih: " + tarih +
-                                            "\nToplam Mesafe: " + toplamMesafe + " km");
+                                            "\nToplam Mesafe: " + toplamMesafe + " km"+"\nKoltuk Sayısı: "+selectedVehicle.kapasite +"\nId: "+seferId);
                                     // Diğer sefer ekleme işlemleri buraya eklenir
                                 } else {
                                     // Kullanıcı hiç şehir seçmedi veya işlemi iptal etti
@@ -664,7 +719,7 @@ public class company extends user implements IProfitable{
                             }
                         }
                     }
-                    if (arac.equals("Havayolu")) {
+                    if (arac.equals("Hava yolu")) {
                         String[] idList = new String[10];
                         if (havaAraclari != null) {
                             for (int i = 0; i < havaAraclari.size(); i++) {
@@ -681,7 +736,14 @@ public class company extends user implements IProfitable{
                             );
                             if (secilenArac != null) {
 
-
+                                Airplane selectedVehicle = null;
+                                for (Airplane havaAraci : havaAraclari) {
+                                    if (secilenArac.equals(havaAraci.id)) {
+                                        selectedVehicle = havaAraci;
+                                        trip.arac = selectedVehicle;
+                                        break;
+                                    }
+                                }
                                 while (true) {
                                     String sehir = (String) JOptionPane.showInputDialog(
                                             null,
@@ -699,6 +761,7 @@ public class company extends user implements IProfitable{
                                     }
 
                                     guzergah.sehirEkle(sehir);
+                                    trip.guzergah.add(sehir);
                                 }
 
 
@@ -712,17 +775,29 @@ public class company extends user implements IProfitable{
                                         tarihSecenekleri,
                                         tarihSecenekleri[0]
                                 );
+                                trip.tarih = tarih;
+                                int seferId = (int) JOptionPane.showInputDialog(
+                                        null,
+                                        "Bir sefer Id'si seçin:",
+                                        "Id Seçimi",
+                                        JOptionPane.QUESTION_MESSAGE,
+                                        null,
+                                        idList2,
+                                        idList2[0]
+                                );
+
 
                                 // Güzerğahı al ve kullan
                                 String olusturulanGuzergah = guzergah.getRoute();
+                                seferId=guzergah.setId(seferId);
                                 int toplamMesafe = guzergah.toplamMesafe(arac);
-
+                                trip.yolUzunlugu = toplamMesafe;
                                 if (!olusturulanGuzergah.isEmpty()) {
-                                    // olusturulanGuzergah'ı ve diğer bilgileri kullanarak gerekli işlemleri yap
+                                    seyahatBilgileri.add(trip);
                                     JOptionPane.showMessageDialog(null, "Oluşturulan Sefer: " + olusturulanGuzergah +
                                             "\nAraç: " + secilenArac +
                                             "\nTarih: " + tarih +
-                                            "\nToplam Mesafe: " + toplamMesafe + " km");
+                                            "\nToplam Mesafe: " + toplamMesafe + " km"+"\nKoltuk Sayısı: "+selectedVehicle.kapasite +"\nId: "+seferId);
                                     // Diğer sefer ekleme işlemleri buraya eklenir
                                 } else {
                                     // Kullanıcı hiç şehir seçmedi veya işlemi iptal etti

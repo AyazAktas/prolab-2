@@ -81,10 +81,12 @@ public class ArayuzTasarim extends JFrame {
         ilkFirma.sifre ="A";
         Bus bus1 = new Bus("Otobüs 1","Kara yolu",40,"Benzin");
         Bus bus2 = new Bus("Otobüs2","Kara yolu",30,"Benzin");
-        Trip trip1 = new Trip(bus1,3,"5 Aralık");
-        Trip trip2 = new Trip(bus2,3,"7 Aralık");
+        Trip trip1 = new Trip(bus1,3,"5 Aralık 2023");
+        Trip trip2 = new Trip(bus2,3,"7 Aralık 2023");
         ilkFirma.seyahatBilgileri.add(trip1);
         ilkFirma.seyahatBilgileri.add(trip2);
+        ilkFirma.seferBasiHizmetPersonelUcreti=2000;
+        ilkFirma.seferBasiAracPersonelUcreti=5000;
         ilkFirma.karaAraclari.add(bus1);
         ilkFirma.karaAraclari.add(bus2);
         admin.firmaListesi.add(ilkFirma);
@@ -95,12 +97,14 @@ public class ArayuzTasarim extends JFrame {
         bFirma.sifre ="B";
         Bus bus3 = new Bus("Otobüs 3","Kara yolu",30,"Motorin");
         Bus bus4 = new Bus("Otobüs 4","Kara yolu",40,"Motorin");
-        Trip trip3 = new Trip(bus3,3,"5 Aralık");
-        Trip trip4 = new Trip(bus4,4,"7 Aralık");
+        Trip trip3 = new Trip(bus3,3,"5 Aralık 2023");
+        Trip trip4 = new Trip(bus4,4,"7 Aralık 2023");
         bFirma.seyahatBilgileri.add(trip3);
         bFirma.seyahatBilgileri.add(trip4);
         bFirma.karaAraclari.add(bus1);
         bFirma.karaAraclari.add(bus2);
+        bFirma.seferBasiAracPersonelUcreti=3000;
+        bFirma.seferBasiHizmetPersonelUcreti=1500;
         admin.firmaListesi.add(bFirma);
 
         company cFirma = new company();
@@ -111,12 +115,16 @@ public class ArayuzTasarim extends JFrame {
         Airplane airplane2 = new Airplane("Uçak 2","Hava yolu",60);
         cFirma.havaAraclari.add(airplane1);
         cFirma.havaAraclari.add(airplane2);
-        Trip trip5 = new Trip(airplane1,5,"5 Aralık");
-        Trip trip6 = new Trip(airplane2,5,"7 Aralık");
-        Trip trip7 = new Trip(bus5,4,"6 Aralık");
+        Trip trip5 = new Trip(airplane1,5,"5 Aralık 2023");
+        Trip trip6 = new Trip(airplane2,5,"7 Aralık 2023");
+        Trip trip7 = new Trip(bus5,4,"6 Aralık 2023");
         cFirma.seyahatBilgileri.add(trip7);
         cFirma.seyahatBilgileri.add(trip5);
         cFirma.seyahatBilgileri.add(trip6);
+        int seferBasiUcakAracC=10000;
+        int seferBasiUcakHizmetC=6000;
+        cFirma.seferBasiHizmetPersonelUcreti=2000;
+        cFirma.seferBasiAracPersonelUcreti=4000;
         admin.firmaListesi.add(cFirma);
 
         company dFirma = new company();
@@ -125,12 +133,14 @@ public class ArayuzTasarim extends JFrame {
         Train train2 = new Train("Tren 2","Demir yolu",50,"Elektrik");
         Train train1 = new Train("Tren 1","Demir yolu",50,"Elektrik");
         Train train3 = new Train("Tren 3","Demir yolu",50,"Elektrik");
-        Trip trip8 = new Trip(train1,1,"5 Aralık");
-        Trip trip9 = new Trip(train2,2,"7 Aralık");
-        Trip trip10 = new Trip(train3,2,"6 Aralık");
+        Trip trip8 = new Trip(train1,1,"5 Aralık 2023");
+        Trip trip9 = new Trip(train2,2,"7 Aralık 2023");
+        Trip trip10 = new Trip(train3,2,"6 Aralık 2023");
         dFirma.seyahatBilgileri.add(trip8);
         dFirma.seyahatBilgileri.add(trip9);
         dFirma.seyahatBilgileri.add(trip10);
+        dFirma.seferBasiAracPersonelUcreti=2000;
+        dFirma.seferBasiHizmetPersonelUcreti=1000;
         admin.firmaListesi.add(dFirma);
 
         company fFirma = new company();
@@ -138,10 +148,12 @@ public class ArayuzTasarim extends JFrame {
         fFirma.sifre ="F";
         Airplane airplane3 = new Airplane("Tren 2","Demir yolu",50);
         Airplane airplane4 = new Airplane("Tren 1","Demir yolu",50);
-        Trip trip11 = new Trip(airplane3,6,"5 Aralık");
-        Trip trip12 = new Trip(airplane4,6,"7 Aralık");
+        Trip trip11 = new Trip(airplane3,6,"5 Aralık 2023");
+        Trip trip12 = new Trip(airplane4,6,"7 Aralık 2023");
         fFirma.seyahatBilgileri.add(trip11);
         fFirma.seyahatBilgileri.add(trip12);
+        fFirma.seferBasiHizmetPersonelUcreti=7500;
+        fFirma.seferBasiAracPersonelUcreti=4000;
         admin.firmaListesi.add(fFirma);
 
         SwingUtilities.invokeLater(new Runnable() {

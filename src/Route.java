@@ -6,7 +6,9 @@ public class Route {
     private List<String> sehirListesi;
     private MesafeMatrisi mesafeMatrisi;
     private List<String> sehirler;
-    public Route(MesafeMatrisi mesafeMatrisi) {
+
+    private int id;
+    public Route(MesafeMatrisi mesafeMatrisi ) {
         this.mesafeMatrisi = mesafeMatrisi;
         this.sehirListesi = new ArrayList<>();
         this.sehirler = new ArrayList<>();
@@ -15,8 +17,17 @@ public class Route {
     public Route() {
         this.sehirListesi = new ArrayList<>();
         this.sehirler = new ArrayList<>();
+        this.id=id;
     }
 
+    public int getId() {
+        return id;
+    }
+
+    public int setId(int id) {
+        this.id = id;
+        return id;
+    }
 
     public void sehirEkle(String sehir) {
         sehirListesi.add(sehir);
@@ -48,13 +59,13 @@ public class Route {
 
             int mesafe = 0;
             switch (ulasimYolu) {
-                case "Karayolu":
+                case "Kara yolu":
                     mesafe = mesafeMatrisi.getKarayoluMesafe(sehir1, sehir2);
                     break;
-                case "Demiryolu":
+                case "Demir yolu":
                     mesafe = mesafeMatrisi.getDemiryoluMesafe(sehir1, sehir2);
                     break;
-                case "Havayolu":
+                case "Hava yolu":
                     mesafe = mesafeMatrisi.getHavayoluMesafe(sehir1, sehir2);
                     break;
                 default:
@@ -69,11 +80,11 @@ public class Route {
 
     public boolean ulasimYoluMevcutMu(String ulasimYolu, String sehir1, String sehir2) {
         switch (ulasimYolu) {
-            case "Karayolu":
+            case "Kara yolu":
                 return mesafeMatrisi.karayoluMesafesiVarMi(sehir1, sehir2);
-            case "Demiryolu":
+            case "Demir yolu":
                 return mesafeMatrisi.demiryoluMesafesiVarMi(sehir1, sehir2);
-            case "Havayolu":
+            case "Hava yolu":
                 return mesafeMatrisi.havayoluMesafesiVarMi(sehir1, sehir2);
             default:
                 return false;

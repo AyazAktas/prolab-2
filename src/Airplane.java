@@ -25,7 +25,7 @@ class Airplane extends Vehicle {
             fuelCost=birimGazFiyati*yolUzunlugu;
             JOptionPane.showMessageDialog(null, "Güzergah için yakıt masrafı : "+fuelCost);
         }
-        return yolUzunlugu;
+        return fuelCost;
     }
 
     // Airplane'e özgü başka metotlar buraya eklenebilir.

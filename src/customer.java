@@ -1,10 +1,13 @@
 import javax.swing.*;
+import java.awt.*;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
 import java.util.ArrayList;
 import java.util.List;
 
 public class customer extends Person {
+
+
 
     public customer(String ad, String soyad, String tcKimlik, String dogumTarihi) {
         super(ad, soyad, tcKimlik, dogumTarihi);
@@ -86,36 +89,83 @@ public class customer extends Person {
                 String secilenVaris = (String) cmbVaris.getSelectedItem();
                 List<Trip> seciliSeferler = new ArrayList<>();
                 List<company> seferlerinFirmasi = new ArrayList<>();
-                if(seferlerinFirmasi !=null && seciliSeferler!= null){
                 for(int i=0;i<admin.firmaListesi.size();i++){
                     for (int j=0; j<admin.firmaListesi.get(i).seyahatBilgileri.size();j++){
                         if(admin.firmaListesi.get(i).seyahatBilgileri.get(j)!=null &&admin.firmaListesi
                                 .get(i).seyahatBilgileri.get(j).guzergah!= null){
-                        if(admin.firmaListesi.get(i).seyahatBilgileri.get(j).guzergah.contains(secilenKalkis)&&admin.firmaListesi
-                                .get(i).seyahatBilgileri.get(j).guzergah.contains(secilenVaris)&&admin.firmaListesi.get(i).seyahatBilgileri
-                                .get(j).tarih.equals(secilenGun)){
-                            seciliSeferler.add(admin.firmaListesi.get(i).seyahatBilgileri.get(j));
-                            seferlerinFirmasi.add(admin.firmaListesi.get(i));
-                            //Sefer bulunması durumu
+                            if(admin.firmaListesi.get(i).seyahatBilgileri.get(j).guzergah.contains(secilenKalkis)&&admin.firmaListesi
+                                    .get(i).seyahatBilgileri.get(j).guzergah.contains(secilenVaris)&&admin.firmaListesi.get(i).seyahatBilgileri
+                                    .get(j).tarih.equals(secilenGun)){
+                                seciliSeferler.add(admin.firmaListesi.get(i).seyahatBilgileri.get(j));
+                                seferlerinFirmasi.add(admin.firmaListesi.get(i));
+
+                                //Sefer bulunması durumu
+                            }
                         }
-                        }
-                    }
                     }
                 }
+
                 if(!seferlerinFirmasi.isEmpty() &&!seciliSeferler.isEmpty()){
-                    seferleriGoruntule(seferlerinFirmasi,seciliSeferler);
+                    JOptionPane.showMessageDialog(null,"Aradığınız sefer mevcuttur.");
+                    dispose();
+                    new Thread(() -> seferleriGoruntule(seferlerinFirmasi, seciliSeferler,secilenKalkis,secilenVaris)).start();
                 }
                 else {
                     JOptionPane.showMessageDialog(null,"Sefer bulunmamaktadır");
                 }
             }
         });
+
         setVisible(true);
     }
-    void seferleriGoruntule(List <company> firmaList,List<Trip>seferList){
-        setTitle("Uygun Seferler");
-        setSize(700, 400);
-        setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
+    void seferleriGoruntule(List<company> firmaList, List<Trip> seferList, String kalkis, String varis) {
+        // Örnek bir JFrame oluşturup içeriği doldur
+        String[] columnNames = {"Sıra no", "Firma", "Ulaşım yolu", "Kalkış", "Varış", "Tarih", "Fiyat"};
+        Object[][] data = new Object[seferList.size()][7];
+
+        for (int i = 0; i < seferList.size(); i++) {
+            Trip sefer = seferList.get(i);
+            data[i][0] = i + 1;
+            data[i][1] = firmaList.get(i).kullaniciAdi;
+            data[i][2] = sefer.arac.tur;
+            data[i][3] = kalkis;
+            data[i][4] = varis;
+            data[i][5] = sefer.tarih;
+            data[i][6] = 100;
+        }
+
+        JFrame seferGoruntuleFrame = new JFrame("Uygun Seferler");
+        seferGoruntuleFrame.setSize(600, 400);
+        seferGoruntuleFrame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
+
+        JComboBox<Integer> cmbSeferNo = new JComboBox<>();
+        for (int i = 0; i < firmaList.size(); i++) {
+            cmbSeferNo.addItem(i + 1);
+        }
+
+        JTable table = new JTable(data, columnNames);
+        JScrollPane scrollPane = new JScrollPane(table);
+        seferGoruntuleFrame.getContentPane().add(scrollPane, BorderLayout.CENTER);
+
+        JPanel panel = new JPanel();
+        panel.add(new JLabel("Gitmek istediğiniz sefer no seçiniz:"));
+        panel.add(cmbSeferNo);
+
+        JButton satinAlButton = new JButton("Satın Al");
+        satinAlButton.addActionListener(e -> {
+            // Satın alma işlemleri burada gerçekleştirilebilir
+            int selectedSeferNo = (int) cmbSeferNo.getSelectedItem();
+            System.out.println("Seçilen Sefer No: " + (selectedSeferNo+1));
+            // Burada satın alma işlemlerini gerçekleştirebilirsiniz
+        });
+        panel.add(satinAlButton);
+
+        // Panel'i JFrame'e ekle
+        seferGoruntuleFrame.getContentPane().add(panel, BorderLayout.SOUTH);
+
+        // setVisible'ı buraya taşıyın
+        seferGoruntuleFrame.setVisible(true);
     }
+
 
 }

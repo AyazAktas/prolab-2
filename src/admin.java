@@ -59,6 +59,10 @@ public class admin extends user{
                 String yeniFirmaPassword = JOptionPane.showInputDialog("Yeni firma şifresini girin:");
                 company.sifre = yeniFirmaPassword;
                 admin.firmaListesi.add(company);
+                int yeniFirmaSeferBasiAracUcreti = Integer.parseInt(JOptionPane.showInputDialog("Yeni firma sefer başı kullanılan araç personeli ücretini girin: "));
+                company.seferBasiAracPersonelUcreti=yeniFirmaSeferBasiAracUcreti;
+                int yeniFirmaSeferBasiHizmetUcreti = Integer.parseInt(JOptionPane.showInputDialog("Yeni firma sefer başı kullanılan hizmet personeli ücretini girin: "));
+                company.seferBasiHizmetPersonelUcreti=yeniFirmaSeferBasiHizmetUcreti;
                 JOptionPane.showMessageDialog(null, "Yeni firma başarıyla kaydedildi.");
             }
         });
@@ -71,13 +75,13 @@ public class admin extends user{
                 } else {
                     String[] firmaAdlari = new String[firmaListesi.size()];
                     for (int i = 0; i < firmaListesi.size(); i++) {
-                        firmaAdlari[i] = firmaListesi.get(i).getFirmaAdi();
+                        firmaAdlari[i] = firmaListesi.get(i).kullaniciAdi;
                     }
                     String secilenFirma = (String) JOptionPane.showInputDialog(null, "Silinecek firmayı seçin:",
                             "Firma Sil", JOptionPane.QUESTION_MESSAGE, null, firmaAdlari, firmaAdlari[0]);
 
                     if (secilenFirma != null) {
-                        firmaListesi.removeIf(firma -> firma.getFirmaAdi().equals(secilenFirma));
+                        firmaListesi.removeIf(firma -> firma.kullaniciAdi.equals(secilenFirma));
                         JOptionPane.showMessageDialog(null, secilenFirma + " firma başarıyla silindi.");
                     }
                 }

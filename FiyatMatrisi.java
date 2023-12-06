@@ -110,45 +110,16 @@ public class FiyatMatrisi {
 
     }
 
-    public void karayoluFiyatiEkle(String sehir1, String sehir2, int mesafe) {
-        karayoluFiyatlari.computeIfAbsent(sehir1, k -> new HashMap<>()).put(sehir2, mesafe);
-        karayoluFiyatlari.computeIfAbsent(sehir2, k -> new HashMap<>()).put(sehir1, mesafe);
-    }
-
-    public void demiryoluMesafesiEkle(String sehir1, String sehir2, int mesafe) {
-        demiryoluFiyatlari.computeIfAbsent(sehir1, k -> new HashMap<>()).put(sehir2, mesafe);
-        demiryoluFiyatlari.computeIfAbsent(sehir2, k -> new HashMap<>()).put(sehir1, mesafe);
-    }
-
-    public void havayoluMesafesiEkle(String sehir1, String sehir2, int mesafe) {
-        havayoluFiyatlari.computeIfAbsent(sehir1, k -> new HashMap<>()).put(sehir2, mesafe);
-        havayoluFiyatlari.computeIfAbsent(sehir2, k -> new HashMap<>()).put(sehir1, mesafe);
-    }
-
     public int getKarayoluFiyatlari(String sehir1, String sehir2) {
         return karayoluFiyatlari.get(sehir1).get(sehir2);
     }
 
-    public int getDemiryoluMesafe(String sehir1, String sehir2) {
+    public int getDemiryoluFiyatlari(String sehir1, String sehir2) {
         return demiryoluFiyatlari.get(sehir1).get(sehir2);
     }
 
-    public int getHavayoluMesafe(String sehir1, String sehir2) {
+    public int getHavayoluFiyatlari(String sehir1, String sehir2) {
         return havayoluFiyatlari.get(sehir1).get(sehir2);
     }
-
-    // Kontrol metodları
-    public boolean karayoluFiyatlariVarMi(String sehir1, String sehir2) {
-        return karayoluFiyatlari.containsKey(sehir1) && karayoluFiyatlari.get(sehir1).containsKey(sehir2);
-    }
-
-    public boolean demiryoluFiyatlariVarMi(String sehir1, String sehir2) {
-        return demiryoluFiyatlari.containsKey(sehir1) && demiryoluFiyatlari.get(sehir1).containsKey(sehir2);
-    }
-
-    public boolean havayoluFiyatlariVarMi(String sehir1, String sehir2) {
-        return havayoluFiyatlari.containsKey(sehir1) && havayoluFiyatlari.get(sehir1).containsKey(sehir2);
-    }
-
 
 }

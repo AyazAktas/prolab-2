@@ -8,6 +8,7 @@ import java.util.List;
 import java.util.Random;
 public class company extends user implements IProfitable{
 
+    public int bakiye;
     String firmaAdi;
     public  int hizmetBedeli=1000;
     public List<Bus> karaAraclari = new ArrayList<>();
@@ -332,30 +333,32 @@ public class company extends user implements IProfitable{
                 if (currentCompany != null) {
                     List<Trip> seyahatBilgileri = currentCompany.seyahatBilgileri;
 
-                    if (!seyahatBilgileri.isEmpty()) {
-                        for (Trip trip : seyahatBilgileri) {
-                            // Check for null values in trip fields to avoid NullPointerException
-                            String guzergah = trip.guzergah != null ? trip.guzergah.toString() : "N/A";
-                            String aracInfo = trip.arac != null ? trip.arac.toString() : "N/A";
-                            String tarih = trip.tarih != null ? trip.tarih : "N/A";
-                            String seferInfo = trip.sefer != null ? trip.sefer.toString() : "N/A";
+                    if (!kullanici.seyahatBilgileri.isEmpty()) {
+                        StringBuilder message = new StringBuilder();
 
-                            JOptionPane.showMessageDialog(null,
-                                    "Oluşturulan Sefer: " + trip.guzergah +
-                                            "\nAraç: " + aracInfo +
-                                            "\nTarih: " + tarih +
-                                            "\nToplam Mesafe: " + trip.yolUzunlugu + " km" +
-                                            "\nKoltuk Sayısı: " + trip.koltukSayisi +
-                                            "\nBoş Koltuk Sayısı: " + trip.bosKoltuk +
-                                            "\nRota: " + seferInfo);
+                        for (Trip trip : kullanici.seyahatBilgileri) {
+                            String guzergah = trip.guzergah != null ? trip.guzergah.toString() : "N/A";
+                            String tarih = trip.tarih != null ? trip.tarih : "N/A";
+
+                            message.append("Oluşturulan Sefer: ").append(guzergah)
+                                    .append("\nAraç: ").append(trip.arac.id)
+                                    .append("\nTarih: ").append(tarih)
+                                    .append("\nToplam Mesafe: ").append(trip.yolUzunlugu).append(" km")
+                                    .append("\nKoltuk Sayısı: ").append(trip.arac.kapasite)
+                                    .append("\nBoş Koltuk Sayısı: ").append(trip.bosKoltuk).append("\n\n");
                         }
+
+                        JTextArea textArea = new JTextArea(message.toString());
+                        textArea.setEditable(false);
+                        JScrollPane scrollPane = new JScrollPane(textArea);
+
+                        JOptionPane.showMessageDialog(null, scrollPane, "Seyahat Bilgileri", JOptionPane.INFORMATION_MESSAGE);
                     } else {
-                        JOptionPane.showMessageDialog(null, "Bu firma için seyahat bilgisi bulunmamaktadır.");
+                        JOptionPane.showMessageDialog(null, "Bu firma için seyahat bilgisi bulunmamaktadır.", "Uyarı", JOptionPane.WARNING_MESSAGE);
                     }
                 }
             }
         });
-
 
 
         btnSeferEkle.addActionListener(new ActionListener() {

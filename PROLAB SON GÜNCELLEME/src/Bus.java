@@ -15,6 +15,9 @@ class Bus extends Vehicle {
         super();
         // Varsayılan değerlerle başlatma işlemleri burada yapılabilir
     }
+    public int bosKoltukSayisi(){
+        return kapasite-doluKoltukSayisi;
+    }
 
     @Override
     public int calculateFuelCost(Route trip) {

@@ -4,6 +4,7 @@ import java.awt.event.ActionListener;
 import java.util.ArrayList;
 import java.util.List;
 import java.awt.GridLayout;
+import java.util.Random;
 
 
 public class ArayuzTasarim extends JFrame {
@@ -89,6 +90,7 @@ public class ArayuzTasarim extends JFrame {
         ilkFirma.seferBasiAracPersonelUcreti=5000;
         ilkFirma.karaAraclari.add(bus1);
         ilkFirma.karaAraclari.add(bus2);
+
         admin.firmaListesi.add(ilkFirma);
 
 
@@ -151,10 +153,17 @@ public class ArayuzTasarim extends JFrame {
         Trip trip11 = new Trip(airplane3,6,"5 Aralık 2023");
         Trip trip12 = new Trip(airplane4,6,"7 Aralık 2023");
         fFirma.seyahatBilgileri.add(trip11);
-        fFirma.seyahatBilgileri.add(trip12);
+        fFirma.seyahatBilgileri.add(trip12); // YOLCU SAYISI KALDIR YERİNE BOŞ KOLTUK SAYISI KADAR NE KADAR BİLET ALABİLECEĞİNİ YA
         fFirma.seferBasiHizmetPersonelUcreti=7500;
         fFirma.seferBasiAracPersonelUcreti=4000;
         admin.firmaListesi.add(fFirma);
+
+        for (company firma : admin.firmaListesi) {
+            for (Trip trip : firma.seyahatBilgileri) {
+                randomDoluKoltukAta(trip.arac);
+            }
+        }
+
 
         SwingUtilities.invokeLater(new Runnable() {
             @Override
@@ -163,7 +172,26 @@ public class ArayuzTasarim extends JFrame {
             }
         });
     }
+    private static void randomDoluKoltukAta(Vehicle arac) {
+        if (arac instanceof Bus) {
+            Bus otobus = (Bus) arac;
+            Random random = new Random();
+            int doluKoltukSayisi = random.nextInt(otobus.getKapasite() + 1); // 0 ile aracın kapasitesi arasında random sayı
+            otobus.setDoluKoltukSayisi(doluKoltukSayisi);
+        } else if (arac instanceof Airplane) {
+            Airplane ucak = (Airplane) arac;
+            Random random = new Random();
+            int doluKoltukSayisi = random.nextInt(ucak.getKapasite() + 1); // 0 ile aracın kapasitesi arasında random sayı
+            ucak.setDoluKoltukSayisi(doluKoltukSayisi);
+        } else if (arac instanceof Train) {
+            Train tren = (Train) arac;
+            Random random = new Random();
+            int doluKoltukSayisi = random.nextInt(tren.getKapasite() + 1); // 0 ile aracın kapasitesi arasında random sayı
+            tren.setDoluKoltukSayisi(doluKoltukSayisi);
+        }
+    }
 }
+
 
 class SeyahatRezervasyonSistemi extends JFrame {
 

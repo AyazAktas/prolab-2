@@ -7,8 +7,6 @@ import java.util.List;
 
 public class customer extends Person {
 
-
-
     public customer(String ad, String soyad, String tcKimlik, String dogumTarihi) {
         super(ad, soyad, tcKimlik, dogumTarihi);
     }
@@ -65,7 +63,7 @@ public class customer extends Person {
         JComboBox<String>cmbGun = new JComboBox<>(new String[] {"4 Aralık 2023", "5 Aralık 2023", "6 Aralık 2023", "7 Aralık 2023", "8 Aralık 2023", "9 Aralık 2023", "10 Aralık 2023"});
         JComboBox<String>cmbKalkis = new JComboBox<>(new String[]{"İstanbul", "Ankara", "Kocaeli", "Eskişehir", "Konya","Bilecik"});
         JComboBox<String>cmbVaris = new JComboBox<>(new String[]{"İstanbul", "Ankara", "Kocaeli", "Eskişehir", "Konya","Bilecik"});
-        JTextField txtYolcuSayisi = new JTextField(7);
+        //JTextField txtYolcuSayisi = new JTextField(7);
         JButton btnSeferBul = new JButton("Sefer Bul");
 
 
@@ -75,8 +73,8 @@ public class customer extends Person {
         panel.add(cmbKalkis);
         panel.add(new JLabel("Varış Şehri:"));
         panel.add(cmbVaris);
-        panel.add(new JLabel("Yolcu Sayısı:"));
-        panel.add(txtYolcuSayisi);
+        //panel.add(new JLabel("Yolcu Sayısı:"));
+        //panel.add(txtYolcuSayisi);
         panel.add(btnSeferBul);
 
         add(panel);
@@ -120,8 +118,8 @@ public class customer extends Person {
     }
     void seferleriGoruntule(List<company> firmaList, List<Trip> seferList, String kalkis, String varis) {
         // Örnek bir JFrame oluşturup içeriği doldur
-        String[] columnNames = {"Sıra no", "Firma", "Ulaşım yolu", "Kalkış", "Varış", "Tarih", "Fiyat"};
-        Object[][] data = new Object[seferList.size()][7];
+        String[] columnNames = {"Sıra no", "Firma", "Ulaşım yolu", "Kalkış", "Varış", "Tarih", "Fiyat","Boş Koltuk Sayısı"};
+        Object[][] data = new Object[seferList.size()][8];
 
         for (int i = 0; i < seferList.size(); i++) {
             Trip sefer = seferList.get(i);
@@ -132,6 +130,7 @@ public class customer extends Person {
             data[i][4] = varis;
             data[i][5] = sefer.tarih;
             data[i][6] = 100;
+            data[i][7]=sefer.arac.bosKoltukSayisi();
         }
 
         JFrame seferGoruntuleFrame = new JFrame("Uygun Seferler");
@@ -142,6 +141,10 @@ public class customer extends Person {
         for (int i = 0; i < firmaList.size(); i++) {
             cmbSeferNo.addItem(i + 1);
         }
+        JComboBox<Integer> cmbBiletSayisi = new JComboBox<>();
+        for (int i = 0; i < 23; i++) {
+            cmbBiletSayisi.addItem(i+1);
+        }
 
         JTable table = new JTable(data, columnNames);
         JScrollPane scrollPane = new JScrollPane(table);
@@ -151,20 +154,88 @@ public class customer extends Person {
         panel.add(new JLabel("Gitmek istediğiniz sefer no seçiniz:"));
         panel.add(cmbSeferNo);
 
+        panel.add(new JLabel("Kaç Adet Bilet alacağınızı seçin:"));
+        panel.add(cmbBiletSayisi);
+
         JButton satinAlButton = new JButton("Satın Al");
         satinAlButton.addActionListener(e -> {
             // Satın alma işlemleri burada gerçekleştirilebilir
             int selectedSeferNo = (int) cmbSeferNo.getSelectedItem();
-            System.out.println("Seçilen Sefer No: " + (selectedSeferNo+1));
+            System.out.println("Seçilen Sefer No: " + selectedSeferNo);
             // Burada satın alma işlemlerini gerçekleştirebilirsiniz
         });
         panel.add(satinAlButton);
+        satinAlButton.addActionListener(e -> {
+            int selectedSeferNo = (int) cmbSeferNo.getSelectedItem();
+            int selectedBiletSayisi = (int) cmbBiletSayisi.getSelectedItem();
+
+            // Get the selected trip and company
+            Trip selectedSefer = seferList.get(selectedSeferNo - 1);
+            company selectedFirma = firmaList.get(selectedSeferNo - 1);
+
+            // Create a dialog to collect additional information
+            JDialog infoDialog = new JDialog();
+            infoDialog.setSize(300, 200);
+            infoDialog.setLayout(new GridLayout(5, 2));
+
+            JTextField txtAd = new JTextField();
+            JTextField txtSoyad = new JTextField();
+            JTextField txtTcKimlik = new JTextField();
+            JTextField txtDogumTarihi = new JTextField();
+
+            infoDialog.add(new JLabel("Ad:"));
+            infoDialog.add(txtAd);
+            infoDialog.add(new JLabel("Soyad:"));
+            infoDialog.add(txtSoyad);
+            infoDialog.add(new JLabel("TC Kimlik:"));
+            infoDialog.add(txtTcKimlik);
+            infoDialog.add(new JLabel("Doğum Tarihi:"));
+            infoDialog.add(txtDogumTarihi);
+
+            JButton btnOnayla = new JButton("Onayla");
+
+            btnOnayla.addActionListener(e1 -> {
+                // Perform the ticket purchase and additional information processing
+                JOptionPane.showMessageDialog(null, selectedBiletSayisi + " bilet satın alındı!");
+
+                // Update the company's balance
+                int bakiyeArtisi = selectedBiletSayisi * 100; // Assuming the ticket price is 100 (you can change this)
+                selectedFirma.bakiye += bakiyeArtisi;
+
+                // Update the number of occupied seats for the selected trip
+                selectedSefer.arac.doluKoltukSayisi += selectedBiletSayisi;
+
+                // Process additional information (e.g., save it to a database)
+                String ad = txtAd.getText();
+                String soyad = txtSoyad.getText();
+                String tcKimlik = txtTcKimlik.getText();
+                String dogumTarihi = txtDogumTarihi.getText();
+
+                // Close the information dialog
+                infoDialog.dispose();
+
+                // Close the "Uygun Seferler" frame
+                seferGoruntuleFrame.dispose();
+
+                // Show the ArayuzTasarim interface
+                SwingUtilities.invokeLater(() -> {
+                    new ArayuzTasarim().setVisible(true);
+                });
+            });
+
+            infoDialog.add(btnOnayla);
+
+            // Set the information dialog to be visible
+            infoDialog.setVisible(true);
+        });
+
 
         // Panel'i JFrame'e ekle
         seferGoruntuleFrame.getContentPane().add(panel, BorderLayout.SOUTH);
 
         // setVisible'ı buraya taşıyın
         seferGoruntuleFrame.setVisible(true);
+
     }
 
 

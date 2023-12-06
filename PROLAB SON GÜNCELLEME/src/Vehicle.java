@@ -4,16 +4,37 @@ abstract class Vehicle {
     public String yakitTuru;
 
     public int kapasite;
+    public int doluKoltukSayisi;
+    public int bosKoltuk;
 
-    public Vehicle(String id, String tur, String yakitTuru, int kapasite) {
+
+    public Vehicle(String id, String tur, String yakitTuru, int kapasite , int doluKoltukSayisi ,int bosKoltuk) {
         this.id = id;
         this.tur = tur;
         this.yakitTuru = yakitTuru;
+        this.doluKoltukSayisi=doluKoltukSayisi;
         this.kapasite=kapasite;
     }
     public Vehicle(){
 
     }
+
+    public int getBosKoltuk() {
+        return bosKoltuk;
+    }
+
+    public void setBosKoltuk(int bosKoltuk) {
+        this.bosKoltuk = bosKoltuk;
+    }
+
+    public int getDoluKoltukSayisi() {
+        return doluKoltukSayisi;
+    }
+
+    public void setDoluKoltukSayisi(int doluKoltukSayisi) {
+        this.doluKoltukSayisi = doluKoltukSayisi;
+    }
+
 
     public String getId() {
         return id;
@@ -48,6 +69,10 @@ abstract class Vehicle {
     }
 
     public abstract int calculateFuelCost(Route trip);
+
+    public int bosKoltukSayisi() {
+        return (kapasite-doluKoltukSayisi);
+    }
 
 
     // Getter ve setter metotları buraya eklenebilir.

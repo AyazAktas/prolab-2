@@ -59,13 +59,13 @@ public class Route {
 
             int mesafe = 0;
             switch (ulasimYolu) {
-                case "Karayolu":
+                case "Kara yolu":
                     mesafe = mesafeMatrisi.getKarayoluMesafe(sehir1, sehir2);
                     break;
-                case "Demiryolu":
+                case "Demir yolu":
                     mesafe = mesafeMatrisi.getDemiryoluMesafe(sehir1, sehir2);
                     break;
-                case "Havayolu":
+                case "Hava yolu":
                     mesafe = mesafeMatrisi.getHavayoluMesafe(sehir1, sehir2);
                     break;
                 default:
@@ -80,11 +80,11 @@ public class Route {
 
     public boolean ulasimYoluMevcutMu(String ulasimYolu, String sehir1, String sehir2) {
         switch (ulasimYolu) {
-            case "Karayolu":
+            case "Kara yolu":
                 return mesafeMatrisi.karayoluMesafesiVarMi(sehir1, sehir2);
-            case "Demiryolu":
+            case "Demir yolu":
                 return mesafeMatrisi.demiryoluMesafesiVarMi(sehir1, sehir2);
-            case "Havayolu":
+            case "Hava yolu":
                 return mesafeMatrisi.havayoluMesafesiVarMi(sehir1, sehir2);
             default:
                 return false;

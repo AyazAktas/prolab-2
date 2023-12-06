@@ -38,4 +38,8 @@ public class Train extends Vehicle {
 
         return yolUzunlugu;
     }
+
+    public int bosKoltukSayisi(){
+        return kapasite-doluKoltukSayisi;
+    }
 }

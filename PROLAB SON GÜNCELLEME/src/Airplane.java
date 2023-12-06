@@ -27,6 +27,9 @@ class Airplane extends Vehicle {
         }
         return fuelCost;
     }
+    public int bosKoltukSayisi(){
+        return kapasite-doluKoltukSayisi;
+    }
 
     // Airplane'e özgü başka metotlar buraya eklenebilir.
 }

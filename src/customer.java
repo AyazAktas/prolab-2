@@ -122,7 +122,7 @@ public class customer extends Person {
         // Örnek bir JFrame oluşturup içeriği doldur
         String[] columnNames = {"Sıra no", "Firma", "Ulaşım yolu", "Kalkış", "Varış", "Tarih", "Fiyat"};
         Object[][] data = new Object[seferList.size()][7];
-
+        FiyatMatrisi fiyatMatrisi = new FiyatMatrisi();
         for (int i = 0; i < seferList.size(); i++) {
             Trip sefer = seferList.get(i);
             data[i][0] = i + 1;
@@ -131,7 +131,18 @@ public class customer extends Person {
             data[i][3] = kalkis;
             data[i][4] = varis;
             data[i][5] = sefer.tarih;
-            data[i][6] = 100;
+            if(sefer.arac.tur.equals("Hava yolu")){
+                data[i][6] = fiyatMatrisi.getHavayoluFiyatlari(varis,kalkis);
+            }
+            if(sefer.arac.tur.equals("Kara yolu")){
+                data[i][6] = fiyatMatrisi.getKarayoluFiyatlari(varis,kalkis);
+            }
+            if(sefer.arac.tur.equals("Demir yolu")){
+                data[i][6]= fiyatMatrisi.getDemiryoluFiyatlari(varis,kalkis);
+            }else {
+                data[i][6] = "Hata oluştu";
+            }
+
         }
 
         JFrame seferGoruntuleFrame = new JFrame("Uygun Seferler");
@@ -159,11 +170,8 @@ public class customer extends Person {
             // Burada satın alma işlemlerini gerçekleştirebilirsiniz
         });
         panel.add(satinAlButton);
-
-        // Panel'i JFrame'e ekle
         seferGoruntuleFrame.getContentPane().add(panel, BorderLayout.SOUTH);
 
-        // setVisible'ı buraya taşıyın
         seferGoruntuleFrame.setVisible(true);
     }
 

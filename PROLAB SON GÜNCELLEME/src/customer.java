@@ -120,7 +120,7 @@ public class customer extends Person {
         // Örnek bir JFrame oluşturup içeriği doldur
         String[] columnNames = {"Sıra no", "Firma", "Ulaşım yolu", "Kalkış", "Varış", "Tarih", "Fiyat","Boş Koltuk Sayısı"};
         Object[][] data = new Object[seferList.size()][8];
-
+        FiyatMatrisi fiyatMatrisi = new FiyatMatrisi();
         for (int i = 0; i < seferList.size(); i++) {
             Trip sefer = seferList.get(i);
             data[i][0] = i + 1;
@@ -129,7 +129,14 @@ public class customer extends Person {
             data[i][3] = kalkis;
             data[i][4] = varis;
             data[i][5] = sefer.tarih;
-            data[i][6] = 100;
+            if(sefer.arac.tur.equals("Kara yolu")){
+                data[i][6] = fiyatMatrisi.getKarayoluFiyatlari(kalkis,varis);}
+            if(sefer.arac.tur.equals("Hava yolu")){
+                data[i][6]=fiyatMatrisi.getHavayoluFiyatlari(kalkis,varis);
+            }
+            if(sefer.arac.tur.equals("Demir yolu")){
+                data[i][6]=fiyatMatrisi.getDemiryoluFiyatlari(kalkis,varis);
+            }
             data[i][7]=sefer.arac.bosKoltukSayisi();
         }
 
@@ -197,7 +204,7 @@ public class customer extends Person {
             btnOnayla.addActionListener(e1 -> {
                 // Perform the ticket purchase and additional information processing
                 JOptionPane.showMessageDialog(null, selectedBiletSayisi + " bilet satın alındı!");
-
+                selectedFirma.bakiye+=selectedSefer.arac.doluKoltukSayisi*100;
                 // Update the company's balance
                 int bakiyeArtisi = selectedBiletSayisi * 100; // Assuming the ticket price is 100 (you can change this)
                 selectedFirma.bakiye += bakiyeArtisi;

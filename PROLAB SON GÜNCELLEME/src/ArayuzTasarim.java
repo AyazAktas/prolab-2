@@ -7,7 +7,7 @@ import java.awt.GridLayout;
 import java.util.Random;
 
 
-public class ArayuzTasarim extends JFrame {
+public class ArayuzTasarim extends JFrame implements IProfitable {
     private static company currentLoggedInCompany;
     public static company getCurrentLoggedInCompany() {
         return currentLoggedInCompany;
@@ -168,7 +168,17 @@ public class ArayuzTasarim extends JFrame {
         SwingUtilities.invokeLater(new Runnable() {
             @Override
             public void run() {
-                new ArayuzTasarim().setVisible(true);
+                new ArayuzTasarim() {
+                    @Override
+                    public void gunlukKar() {
+
+                    }
+
+                    @Override
+                    public void karZararDurumu() {
+
+                    }
+                }.setVisible(true);
             }
         });
     }
@@ -189,6 +199,16 @@ public class ArayuzTasarim extends JFrame {
             int doluKoltukSayisi = random.nextInt(tren.getKapasite() + 1); // 0 ile aracın kapasitesi arasında random sayı
             tren.setDoluKoltukSayisi(doluKoltukSayisi);
         }
+    }
+
+    @Override
+    public void gunlukKar() {
+
+    }
+
+    @Override
+    public void karZararDurumu() {
+
     }
 }
 

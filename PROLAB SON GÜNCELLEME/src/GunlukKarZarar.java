@@ -9,7 +9,7 @@ public class GunlukKarZarar extends company {
 
     }
 
-    public int gunlukKar() {
+    public void gunlukKar() {
         company company=new company();
         int count=0;
         String[] idList = new String[havaAraclari.size()];
@@ -21,13 +21,13 @@ public class GunlukKarZarar extends company {
         //int AirplaneFuelCost= airplane.calculateFuelCost() * count;
 
         double hizmetBedeli = company.hizmetBedeli;
+        double biletGeliri=company.bakiye;
         double hizmetPersonelUcreti = company.seferBasiHizmetPersonelUcreti;
         double aracPersonelUcreti = company.seferBasiAracPersonelUcreti;
         //double fuelCost = arac.calculateFuelCost(/* Pass the appropriate Route object */);
 
-        //double gunlukKar = hizmetBedeli - (hizmetPersonelUcreti + aracPersonelUcreti + fuelCost);
+        //double gunlukKar = hizmetBedeli + bakiye - (hizmetPersonelUcreti + aracPersonelUcreti + fuelCost);
 
         // Convert the result to int if needed
-        return (int) hizmetBedeli;
     }
 }

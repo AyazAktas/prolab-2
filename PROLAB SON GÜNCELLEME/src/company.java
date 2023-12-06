@@ -338,17 +338,14 @@ public class company extends user implements IProfitable{
 
                         for (Trip trip : kullanici.seyahatBilgileri) {
                             String guzergah = trip.guzergah != null ? trip.guzergah.toString() : "N/A";
-                            String aracInfo = trip.arac != null ? trip.arac.toString() : "N/A";
                             String tarih = trip.tarih != null ? trip.tarih : "N/A";
-                            String seferInfo = trip.sefer != null ? trip.sefer.toString() : "N/A";
 
                             message.append("Oluşturulan Sefer: ").append(guzergah)
-                                    .append("\nAraç: ").append(aracInfo)
+                                    .append("\nAraç: ").append(trip.arac.id)
                                     .append("\nTarih: ").append(tarih)
                                     .append("\nToplam Mesafe: ").append(trip.yolUzunlugu).append(" km")
-                                    .append("\nKoltuk Sayısı: ").append(trip.koltukSayisi)
-                                    .append("\nBoş Koltuk Sayısı: ").append(trip.bosKoltuk)
-                                    .append("\nRota: ").append(seferInfo).append("\n\n");
+                                    .append("\nKoltuk Sayısı: ").append(trip.arac.kapasite)
+                                    .append("\nBoş Koltuk Sayısı: ").append(trip.arac.bosKoltukSayisi()).append("\n\n");
                         }
 
                         JTextArea textArea = new JTextArea(message.toString());
@@ -836,5 +833,15 @@ public class company extends user implements IProfitable{
 
     String getFirmaAdi(){
         return firmaAdi;
+    }
+
+    @Override
+    public void gunlukKar() {
+
+    }
+
+    @Override
+    public void karZararDurumu() {
+
     }
 }
